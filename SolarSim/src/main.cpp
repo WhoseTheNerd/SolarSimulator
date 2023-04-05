@@ -5,9 +5,19 @@
 class SolarSimApp : public Pandora::Application
 {
 public:
-    SolarSimApp()
+    void OnEvent(Pandora::Event& e) override
     {
-        PD_INFO("It is working!");
+        Pandora::Application::OnEvent(e);
+
+        Pandora::EventDispatcher dispatcher(e);
+        dispatcher.Dispatch<Pandora::MouseMovedEvent>(PD_BIND_EVENT_FN(SolarSimApp::OnMouseMoveEvent));
+    }
+
+    bool OnMouseMoveEvent(Pandora::MouseMovedEvent& e)
+    {
+        PD_INFO("{}", e);
+
+        return false;
     }
 };
 

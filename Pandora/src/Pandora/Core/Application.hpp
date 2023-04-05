@@ -16,7 +16,7 @@ namespace Pandora {
 
         void Run();
 
-        void OnEvent(Event& e);
+        virtual void OnEvent(Event& e);
     private:
         bool OnWindowClose(WindowCloseEvent& e);
     private:

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "LinuxWindow.hpp"
 
 #include "Pandora/Events/Event.hpp"
