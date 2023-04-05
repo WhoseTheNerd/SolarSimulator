@@ -1,0 +1,8 @@
+[submodule "Pandora/vendor/spdlog"]
+	path = Pandora/vendor/spdlog
+	url = https://github.com/gabime/spdlog/
+	branch = master
+[submodule "Pandora/vendor/glm"]
+	path = Pandora/vendor/glm
+	url = https://github.com/g-truc/glm
+	branch = master
