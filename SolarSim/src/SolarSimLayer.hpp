@@ -15,9 +15,8 @@ namespace SolarSim {
         virtual void OnUpdate(Pandora::Timestep ts) override;
         virtual void OnRender() override;
         virtual void OnEvent(Pandora::Event& event);
-
     private:
-        bool OnMouseMoveEvent(Pandora::MouseMovedEvent& e);
+        bool OnKeyPressed(Pandora::KeyPressedEvent& e);
     private:
         Pandora::Ref<Pandora::VertexArray> m_VAO;
         Pandora::Ref<Pandora::Shader> m_Shader;

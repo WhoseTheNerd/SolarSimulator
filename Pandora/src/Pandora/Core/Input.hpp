@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Pandora/Core/Base.hpp"
+#include "Pandora/Core/KeyCodes.hpp"
+#include "Pandora/Core/MouseCodes.hpp"
 
 namespace Pandora {
 

@@ -59,45 +59,27 @@ namespace SolarSim {
 
     void SolarSimLayer::OnUpdate(Pandora::Timestep ts)
     {
-        constexpr float SPEED = 2.5f;
-
-        if (Pandora::Input::IsKeyPressed(PD_KEY_W))
-        {
+        const float SPEED = 2.5f * ts;
+        if (Pandora::Input::IsKeyPressed(PD_KEY_W)) {
             glm::vec3 pos = m_Camera.GetPosition();
-            pos.y -= SPEED * ts;
+            pos.y -= SPEED;
             m_Camera.SetPosition(pos);
         }
-        if (Pandora::Input::IsKeyPressed(PD_KEY_S))
-        {
+        if (Pandora::Input::IsKeyPressed(PD_KEY_S)) {
             glm::vec3 pos = m_Camera.GetPosition();
-            pos.y += SPEED * ts;
+            pos.y += SPEED;
             m_Camera.SetPosition(pos);
         }
-        if (Pandora::Input::IsKeyPressed(PD_KEY_A))
-        {
+        if (Pandora::Input::IsKeyPressed(PD_KEY_A)) {
             glm::vec3 pos = m_Camera.GetPosition();
-            pos.x += SPEED * ts;
+            pos.x += SPEED;
             m_Camera.SetPosition(pos);
         }
-        if (Pandora::Input::IsKeyPressed(PD_KEY_D))
-        {
+        if (Pandora::Input::IsKeyPressed(PD_KEY_D)) {
             glm::vec3 pos = m_Camera.GetPosition();
-            pos.x -= SPEED * ts;
+            pos.x -= SPEED;
             m_Camera.SetPosition(pos);
         }
-        if (Pandora::Input::IsKeyPressed(PD_KEY_Q)) 
-        {
-            float rot = m_Camera.GetRotation();
-            rot -= 45.0f * ts;
-            m_Camera.SetRotation(rot);
-        }        
-        if (Pandora::Input::IsKeyPressed(PD_KEY_E)) 
-        {
-            float rot = m_Camera.GetRotation();
-            rot += 45.0f * ts;
-            m_Camera.SetRotation(rot);
-        }
-
         m_Shader->SetUniform("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
     }
 
@@ -112,11 +94,66 @@ namespace SolarSim {
     void SolarSimLayer::OnEvent(Pandora::Event& event) 
     {
         Pandora::EventDispatcher dispatcher(event);
-        dispatcher.Dispatch<Pandora::MouseMovedEvent>(PD_BIND_EVENT_FN(SolarSimLayer::OnMouseMoveEvent));
+        dispatcher.Dispatch<Pandora::KeyPressedEvent>(PD_BIND_EVENT_FN(SolarSimLayer::OnKeyPressed));
     }
 
-    bool SolarSimLayer::OnMouseMoveEvent(Pandora::MouseMovedEvent& e)
+    bool SolarSimLayer::OnKeyPressed(Pandora::KeyPressedEvent& e)
     {
+        constexpr float EQUAL_ANGLE_PARTS = 4.0f;
+
+        switch (e.GetKeyCode())
+        {
+        case PD_KEY_Q:
+            Pandora::Application::Get().SetRunning(false);
+            break;
+
+        case PD_KEY_KP_2:
+        {
+            float zoom = m_Camera.GetZoomLevel();
+            zoom += 0.1f;
+            if (zoom > 4.0f) {
+                zoom = 4.0f;
+            }
+            m_Camera.SetZoomLevel(zoom);
+            break;
+        }
+
+        case PD_KEY_KP_8:
+        {
+            float zoom = m_Camera.GetZoomLevel();
+            zoom -= 0.1f;
+            if (zoom < 0.05f) {
+                zoom = 0.05f;
+            }
+            m_Camera.SetZoomLevel(zoom);
+            break;
+        }
+        
+        case PD_KEY_KP_4:
+        {
+            if (e.GetRepeatCount() == 1) break;
+
+            float rot = m_Camera.GetRotation();
+            rot -= 90.0f / EQUAL_ANGLE_PARTS;
+            m_Camera.SetRotation(rot);
+
+            break;
+        }
+
+        case PD_KEY_KP_6:
+        {
+            if (e.GetRepeatCount() == 1) break;
+
+            float rot = m_Camera.GetRotation();
+            rot += 90.0f / EQUAL_ANGLE_PARTS;
+            m_Camera.SetRotation(rot);
+
+            break;
+        }
+
+        default: break;
+        }
+
         return false;
     }
 

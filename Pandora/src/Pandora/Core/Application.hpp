@@ -26,6 +26,8 @@ namespace Pandora {
 
         inline Window& GetWindow() { return *m_Window; }    
 
+        inline void SetRunning(bool state) { m_Running = state; }
+
         inline static Application& Get() { return *s_Instance; }
     private:
         bool OnWindowClose(WindowCloseEvent& e);
