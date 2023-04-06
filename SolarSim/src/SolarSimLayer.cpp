@@ -5,6 +5,7 @@
 namespace SolarSim {
 
     SolarSimLayer::SolarSimLayer()
+        : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
     {
     }
 
@@ -47,7 +48,8 @@ namespace SolarSim {
 
         m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
         m_Shader->Bind();  
-        m_Shader->SetUniform("u_Texture", 0);   
+        m_Shader->SetUniform("u_Texture", 0);
+        m_Shader->SetUniform("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
     }
 
     void SolarSimLayer::OnDetach()

@@ -19,3 +19,4 @@
 #include "Pandora/Graphics/RenderCommand.hpp"
 #include "Pandora/Graphics/RendererAPI.hpp"
 #include "Pandora/Graphics/Texture.hpp"
+#include "Pandora/Graphics/OrthographicCamera.hpp"
