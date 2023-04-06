@@ -6,6 +6,9 @@
 #include "Pandora/Core/Layer.hpp"
 #include "Pandora/Core/LayerStack.hpp"
 #include "Pandora/Core/Timestep.hpp"
+#include "Pandora/Core/Input.hpp"
+#include "Pandora/Core/KeyCodes.hpp"
+#include "Pandora/Core/MouseCodes.hpp"
 
 #include "Pandora/Events/Event.hpp"
 #include "Pandora/Events/ApplicationEvent.hpp"

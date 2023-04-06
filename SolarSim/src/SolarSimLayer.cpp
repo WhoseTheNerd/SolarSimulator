@@ -59,7 +59,46 @@ namespace SolarSim {
 
     void SolarSimLayer::OnUpdate(Pandora::Timestep ts)
     {
+        constexpr float SPEED = 2.5f;
 
+        if (Pandora::Input::IsKeyPressed(PD_KEY_W))
+        {
+            glm::vec3 pos = m_Camera.GetPosition();
+            pos.y -= SPEED * ts;
+            m_Camera.SetPosition(pos);
+        }
+        if (Pandora::Input::IsKeyPressed(PD_KEY_S))
+        {
+            glm::vec3 pos = m_Camera.GetPosition();
+            pos.y += SPEED * ts;
+            m_Camera.SetPosition(pos);
+        }
+        if (Pandora::Input::IsKeyPressed(PD_KEY_A))
+        {
+            glm::vec3 pos = m_Camera.GetPosition();
+            pos.x += SPEED * ts;
+            m_Camera.SetPosition(pos);
+        }
+        if (Pandora::Input::IsKeyPressed(PD_KEY_D))
+        {
+            glm::vec3 pos = m_Camera.GetPosition();
+            pos.x -= SPEED * ts;
+            m_Camera.SetPosition(pos);
+        }
+        if (Pandora::Input::IsKeyPressed(PD_KEY_Q)) 
+        {
+            float rot = m_Camera.GetRotation();
+            rot -= 45.0f * ts;
+            m_Camera.SetRotation(rot);
+        }        
+        if (Pandora::Input::IsKeyPressed(PD_KEY_E)) 
+        {
+            float rot = m_Camera.GetRotation();
+            rot += 45.0f * ts;
+            m_Camera.SetRotation(rot);
+        }
+
+        m_Shader->SetUniform("u_ViewProjection", m_Camera.GetViewProjectionMatrix());
     }
 
     void SolarSimLayer::OnRender()

@@ -22,6 +22,8 @@ namespace Pandora {
         inline void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override { return m_Data.VSync; }
+
+        virtual void* GetNativeWindow() const override { return m_WindowHandle; }
     private:
         GLFWwindow* m_WindowHandle;
 
