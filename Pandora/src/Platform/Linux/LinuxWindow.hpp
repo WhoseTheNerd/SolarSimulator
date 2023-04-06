@@ -2,6 +2,8 @@
 
 #include "Pandora/Core/Window.hpp"
 
+#include "Pandora/Graphics/GraphicsContext.hpp"
+
 struct GLFWwindow;
 
 namespace Pandora {
@@ -33,5 +35,7 @@ namespace Pandora {
         };
 
         WindowData m_Data;
+
+        Scope<GraphicsContext> m_Context;
     };
 }

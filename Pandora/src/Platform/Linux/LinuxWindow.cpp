@@ -32,10 +32,15 @@ namespace Pandora {
             s_GLFWInitialized = true;
         }
 
+		glfwWindowHint(GLFW_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_VERSION_MINOR, 5);
+		glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         m_WindowHandle = glfwCreateWindow(props.Width, props.Height, m_Data.Title.c_str(), nullptr, nullptr);
         PD_CORE_ASSERT(m_WindowHandle, "Failed to create GLFW window!");
 
-        glfwMakeContextCurrent(m_WindowHandle);
+		m_Context = GraphicsContext::Create(m_WindowHandle);
+		m_Context->Init();
+        
         glfwSetWindowUserPointer(m_WindowHandle, &m_Data);
 
         // Set GLFW callbacks
@@ -130,7 +135,7 @@ namespace Pandora {
     void LinuxWindow::OnUpdate()
     {
         glfwPollEvents();
-        glfwSwapBuffers(m_WindowHandle);
+        m_Context->SwapBuffers();
     }
 
     void LinuxWindow::SetVSync(bool enabled)

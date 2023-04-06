@@ -50,7 +50,6 @@ namespace Pandora {
 
 	void Application::Run()
 	{
-		glClearColor(0.2f, 0.3f, 0.8f, 1.0f);
 		while (m_Running)
 		{
 			float time = static_cast<float>(glfwGetTime());
@@ -61,7 +60,9 @@ namespace Pandora {
 				layer->OnUpdate(timestep);
 			}
 
-			glClear(GL_COLOR_BUFFER_BIT);
+			for (Layer* layer : m_LayerStack) {
+				layer->OnRender();
+			}
 			m_Window->OnUpdate();
 		}
 	}

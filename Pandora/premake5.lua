@@ -10,9 +10,7 @@ project "Pandora"
     files
     {
         "src/**.hpp",
-        "src/**.cpp",
-        "vendor/glm/glm/**.hpp",
-		"vendor/glm/glm/**.inl"
+        "src/**.cpp"
     }
 
     defines
@@ -23,7 +21,8 @@ project "Pandora"
     includedirs
     {
         "src",
-        "vendor/spdlog/include/"
+        "vendor/spdlog/include/",
+        "vendor/glm/"
     }
 
     links
