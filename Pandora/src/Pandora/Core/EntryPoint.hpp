@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Application.hpp"
-#include "Log.hpp"
+#include "Pandora/Core/Log.hpp"
+#include "Pandora/Core/Application.hpp"
 
 extern Pandora::Scope<Pandora::Application> Pandora::CreateApplication();
 

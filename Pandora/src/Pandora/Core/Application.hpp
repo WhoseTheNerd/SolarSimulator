@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Base.hpp"
-#include "Window.hpp"
+#include "Pandora/Core/Base.hpp"
+#include "Pandora/Core/Window.hpp"
 
 #include "Pandora/Events/Event.hpp"
 #include "Pandora/Events/ApplicationEvent.hpp"
