@@ -17,15 +17,16 @@ namespace SolarSim {
         m_VAO = Pandora::VertexArray::Create();
 
         float vertices[] = {
-             0.5f,  0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            -0.5f,  0.5f, 0.0f
+             0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
+             0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
+            -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
+            -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
         };
 
         Pandora::Ref<Pandora::VertexBuffer> vbo = Pandora::VertexBuffer::Create(vertices, sizeof(vertices));
         Pandora::BufferLayout layout = {
-            { Pandora::ShaderDataType::Float3, "a_Position" }
+            { Pandora::ShaderDataType::Float3, "a_Position" },
+            { Pandora::ShaderDataType::Float2, "a_UV" }
         };
         vbo->SetLayout(layout);
 
@@ -41,8 +42,12 @@ namespace SolarSim {
         
         m_VAO->Bind();
 
+        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/wall.jpg");
+        m_Texture->Bind();
+
         m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
-        m_Shader->Bind();     
+        m_Shader->Bind();  
+        m_Shader->SetUniform("u_Texture", 0);   
     }
 
     void SolarSimLayer::OnDetach()

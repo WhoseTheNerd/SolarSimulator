@@ -10,7 +10,9 @@ project "Pandora"
     files
     {
         "src/**.hpp",
-        "src/**.cpp"
+        "src/**.cpp",
+        "vendor/stb_image/stb_image.h",
+        "vendor/stb_image/stb_image.cpp"
     }
 
     defines
@@ -22,7 +24,8 @@ project "Pandora"
     {
         "src",
         "vendor/spdlog/include/",
-        "vendor/glm/"
+        "vendor/glm/",
+        "vendor/stb_image/"
     }
 
     links

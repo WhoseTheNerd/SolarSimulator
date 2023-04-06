@@ -21,6 +21,7 @@ namespace SolarSim {
     private:
         Pandora::Ref<Pandora::VertexArray> m_VAO;
         Pandora::Ref<Pandora::Shader> m_Shader;
+        Pandora::Ref<Pandora::Texture2D> m_Texture;
     };
 
 }
