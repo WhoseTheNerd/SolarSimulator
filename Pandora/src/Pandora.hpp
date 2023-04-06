@@ -3,6 +3,10 @@
 #include "Pandora/Core/Base.hpp"
 #include "Pandora/Core/Application.hpp"
 #include "Pandora/Core/EntryPoint.hpp"
+#include "Pandora/Core/Log.hpp"
+#include "Pandora/Core/Layer.hpp"
+#include "Pandora/Core/LayerStack.hpp"
+#include "Pandora/Core/Timestep.hpp"
 
 #include "Pandora/Events/Event.hpp"
 #include "Pandora/Events/ApplicationEvent.hpp"

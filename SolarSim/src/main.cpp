@@ -2,22 +2,34 @@
 
 #include <Pandora.hpp>
 
-class SolarSimApp : public Pandora::Application
+class SolarSimLayer : public Pandora::Layer
 {
 public:
-    void OnEvent(Pandora::Event& e) override
+    virtual void OnAttach() override {}
+    virtual void OnDetach() override {}
+    virtual void OnUpdate(Pandora::Timestep ts) override {}
+    virtual void OnRender() override {}
+    virtual void OnEvent(Pandora::Event& event) override 
     {
-        Pandora::Application::OnEvent(e);
-
-        Pandora::EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<Pandora::MouseMovedEvent>(PD_BIND_EVENT_FN(SolarSimApp::OnMouseMoveEvent));
+        Pandora::EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<Pandora::MouseMovedEvent>(PD_BIND_EVENT_FN(SolarSimLayer::OnMouseMoveEvent));
     }
 
+private:
     bool OnMouseMoveEvent(Pandora::MouseMovedEvent& e)
     {
         PD_INFO("{}", e);
 
         return false;
+    }
+};
+
+class SolarSimApp : public Pandora::Application
+{
+public:
+    SolarSimApp()
+    {
+        PushLayer(new SolarSimLayer());
     }
 };
 
