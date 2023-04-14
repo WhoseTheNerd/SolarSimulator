@@ -17,14 +17,20 @@ namespace SolarSim {
     {
         m_VAO = Pandora::VertexArray::Create();
 
-        float vertices[] = {
-             0.5f,  0.5f, 0.0f,  1.0f, 1.0f,
-             0.5f, -0.5f, 0.0f,  1.0f, 0.0f,
-            -0.5f, -0.5f, 0.0f,  0.0f, 0.0f,
-            -0.5f,  0.5f, 0.0f,  0.0f, 1.0f,
+        struct Vertex
+        {
+            glm::vec3 Position;
+            glm::vec2 TexCoords;
         };
 
-        Pandora::Ref<Pandora::VertexBuffer> vbo = Pandora::VertexBuffer::Create(vertices, sizeof(vertices));
+        const std::vector<Vertex> vertices = {
+            {{ 0.5f,  0.5f, 0.0f}, {1.0f, 1.0f}},
+            {{ 0.5f, -0.5f, 0.0f}, {1.0f, 0.0f}},
+            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f}},
+            {{-0.5f,  0.5f, 0.0f}, {0.0f, 1.0f}},
+        };
+
+        Pandora::Ref<Pandora::VertexBuffer> vbo = Pandora::VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
         Pandora::BufferLayout layout = {
             { Pandora::ShaderDataType::Float3, "a_Position" },
             { Pandora::ShaderDataType::Float2, "a_UV" }
@@ -33,12 +39,12 @@ namespace SolarSim {
 
         m_VAO->AddVertexBuffer(vbo);
 
-        uint32_t indices[] = {
+        const std::vector<uint32_t> indices = {
             0, 1, 3,
             1, 2, 3
         };
 
-        Pandora::Ref<Pandora::IndexBuffer> ibo = Pandora::IndexBuffer::Create(indices, sizeof(indices) / sizeof(indices[0]));
+        Pandora::Ref<Pandora::IndexBuffer> ibo = Pandora::IndexBuffer::Create(indices);
         m_VAO->SetIndexBuffer(ibo);
         
         m_VAO->Bind();
