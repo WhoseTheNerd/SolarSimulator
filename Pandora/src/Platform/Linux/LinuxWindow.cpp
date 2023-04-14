@@ -42,6 +42,7 @@ namespace Pandora {
 		m_Context->Init();
         
         glfwSetWindowUserPointer(m_WindowHandle, &m_Data);
+		glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_WindowHandle, [](GLFWwindow* window, int width, int height)
