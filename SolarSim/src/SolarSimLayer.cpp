@@ -81,8 +81,6 @@ namespace SolarSim {
 
     bool SolarSimLayer::OnKeyPressed(Pandora::KeyPressedEvent& e)
     {
-        constexpr float EQUAL_ANGLE_PARTS = 4.0f;
-
         switch (e.GetKeyCode())
         {
         case Pandora::Key::Escape:
