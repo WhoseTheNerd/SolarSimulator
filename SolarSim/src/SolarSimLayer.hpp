@@ -18,7 +18,7 @@ namespace SolarSim {
     private:
         bool OnKeyPressed(Pandora::KeyPressedEvent& e);
     private:
-        Pandora::Ref<Pandora::VertexArray> m_VAO;
+        Pandora::Ref<Pandora::Mesh> m_Mesh;
         Pandora::Ref<Pandora::Shader> m_Shader;
         Pandora::Ref<Pandora::Texture2D> m_Texture;
 

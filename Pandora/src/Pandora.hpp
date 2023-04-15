@@ -27,3 +27,4 @@
 #include "Pandora/Graphics/OrthographicCameraController.hpp"
 #include "Pandora/Graphics/PerspectiveCamera.hpp"
 #include "Pandora/Graphics/PerspectiveCameraController.hpp"
+#include "Pandora/Graphics/Mesh.hpp"

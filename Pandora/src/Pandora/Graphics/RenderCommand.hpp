@@ -22,11 +22,11 @@ namespace Pandora {
 			s_RendererAPI->Clear();
 		}
 
-		inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+		inline static void DrawIndexed(const Ref<Mesh>& mesh)
 		{
-			s_RendererAPI->DrawIndexed(vertexArray);
+			s_RendererAPI->DrawIndexed(mesh);
 		}
 	private:
-		static Scope<RendererAPI> s_RendererAPI;
+		static inline Scope<RendererAPI> s_RendererAPI = RendererAPI::Create();
     };
 }
