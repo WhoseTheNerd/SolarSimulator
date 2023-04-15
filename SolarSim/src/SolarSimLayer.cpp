@@ -143,10 +143,21 @@ namespace SolarSim {
 
     bool SolarSimLayer::OnKeyPressed(Pandora::KeyPressedEvent& e)
     {
+        static bool wireframe_mode = false;
+
         switch (e.GetKeyCode())
         {
         case Pandora::Key::Escape:
             Pandora::Application::Get().SetRunning(false);
+            break;
+
+        case Pandora::Key::G:
+            wireframe_mode ^= true;
+            if (wireframe_mode) {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            } else {
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            }
             break;
 
         default: break;
