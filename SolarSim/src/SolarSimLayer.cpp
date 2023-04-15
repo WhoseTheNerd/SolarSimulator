@@ -47,6 +47,34 @@ namespace SolarSim {
     {
         m_CameraController.OnUpdate(ts);
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
+
+        if (Pandora::Input::IsKeyPressed(Pandora::Key::Up))
+        {
+            glm::vec3 position = m_Entity->GetPosition();
+            position.z -= 20.0f * ts;
+            m_Entity->SetPosition(position);
+        }
+        else if (Pandora::Input::IsKeyPressed(Pandora::Key::Down))
+        {
+            glm::vec3 position = m_Entity->GetPosition();
+            position.z += 20.0f * ts;
+            m_Entity->SetPosition(position);
+        }
+
+        if (Pandora::Input::IsKeyPressed(Pandora::Key::Left))
+        {
+            glm::vec3 position = m_Entity->GetPosition();
+            position.x -= 20.0f * ts;
+            m_Entity->SetPosition(position);
+        }
+        else if (Pandora::Input::IsKeyPressed(Pandora::Key::Right))
+        {
+            glm::vec3 position = m_Entity->GetPosition();
+            position.x += 20.0f * ts;
+            m_Entity->SetPosition(position);
+        }
+
+        m_Shader->SetUniform("u_Model", m_Entity->GetModelMatrix());
     }
 
     void SolarSimLayer::OnRender()
