@@ -1,9 +1,32 @@
 #include "SolarSimLayer.hpp"
 
+#include <unordered_map>
+
 #include <GL/glew.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <tiny_obj_loader.h>
+
+struct Vertex
+{
+    glm::vec3 Position;
+    glm::vec2 TexCoords;
+
+    bool operator==(const Vertex& other) const {
+        return Position == other.Position && TexCoords == other.TexCoords;
+    }
+};
+
+namespace std {
+    template<> struct hash<Vertex> {
+        size_t operator()(Vertex const& vertex) const {
+            return ((hash<glm::vec3>()(vertex.Position) ^
+                   (hash<glm::vec2>()(vertex.TexCoords) << 1)));
+        }
+    };
+}
 
 namespace SolarSim {
 
@@ -20,12 +43,6 @@ namespace SolarSim {
     {
         m_VAO = Pandora::VertexArray::Create();
 
-        struct Vertex
-        {
-            glm::vec3 Position;
-            glm::vec2 TexCoords;
-        };
-
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
@@ -40,6 +57,8 @@ namespace SolarSim {
 
         std::vector<Vertex> vertices;
         std::vector<uint32_t> indices;
+
+        std::unordered_map<Vertex, uint32_t> uniqueVertices{};
 
         for (const auto& shape : shapes) {
             for (const auto& index : shape.mesh.indices) {
@@ -56,10 +75,16 @@ namespace SolarSim {
                     attrib.texcoords[2 * index.texcoord_index + 1],
                 };
 
-                vertices.push_back(vertex);
-                indices.push_back(indices.size());
+                if (uniqueVertices.count(vertex) == 0) {
+                    uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+                    vertices.push_back(vertex);
+                }
+
+                indices.push_back(uniqueVertices[vertex]);
             }
         }
+
+        PD_INFO("Vertices: {}", vertices.size());
 
         Pandora::Ref<Pandora::VertexBuffer> vbo = Pandora::VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
         Pandora::BufferLayout layout = {
