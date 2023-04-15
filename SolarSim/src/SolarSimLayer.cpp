@@ -53,7 +53,7 @@ namespace SolarSim {
 
                 vertex.TexCoords = {
                     attrib.texcoords[2 * index.texcoord_index + 0],
-                    1.0f - attrib.texcoords[2 * index.texcoord_index + 1],
+                    attrib.texcoords[2 * index.texcoord_index + 1],
                 };
 
                 vertices.push_back(vertex);
