@@ -19,7 +19,10 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
-        m_Mesh = Pandora::CreateRef<Pandora::Mesh>("SolarSim/assets/viking_room.obj");
+        m_Entity = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/viking_room.obj");
+        m_Entity->SetScale(2.0f);
+        m_Entity->SetRotation({90.0f, 180.0f, 0.0f});
+        m_Entity->SetPosition({0.0f, -0.5f, 0.0f});
 
         m_Texture = Pandora::Texture2D::Create("SolarSim/assets/viking_room.png");
         m_Texture->Bind();
@@ -32,11 +35,7 @@ namespace SolarSim {
         m_Shader->SetUniform("u_LightColor", Pandora::FromHex("#D3D3D3"));
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 
-        glm::mat4 model = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3{1, 0, 0});
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3{0, 1, 0});
-        model = glm::translate(model, glm::vec3{0.0f, 0.0f, -0.5f});
-        model = glm::scale(model, glm::vec3{2.0f});
-        m_Shader->SetUniform("u_Model", model);
+        m_Shader->SetUniform("u_Model", m_Entity->GetModelMatrix());
     }
 
     void SolarSimLayer::OnDetach()
@@ -55,7 +54,7 @@ namespace SolarSim {
         Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
         Pandora::RenderCommand::Clear();
         
-        Pandora::RenderCommand::DrawIndexed(m_Mesh);
+        Pandora::RenderCommand::DrawIndexed(m_Entity->GetMesh());
     }
 
     void SolarSimLayer::OnEvent(Pandora::Event& event) 
