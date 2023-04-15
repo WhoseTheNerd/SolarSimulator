@@ -13,11 +13,7 @@ namespace Pandora {
 
     void PerspectiveCameraController::OnUpdate(Timestep ts)
     {
-        constexpr float G = 9.81f;
-        constexpr float JUMP_HEIGHT = 2.0f;
-        static bool jumping = false;
-
-        float y = m_CameraPosition.y;
+        const float y = m_CameraPosition.y;
         if (Input::IsKeyPressed(Key::A))
 		{
             m_CameraPosition -= glm::normalize(glm::cross(m_Camera.GetFront(), m_Camera.GetUp())) * (m_CameraTranslationSpeed * ts);
@@ -37,26 +33,13 @@ namespace Pandora {
 		}
         m_CameraPosition.y = y;
 
-        if (m_CameraPosition.y <= 0.0f) {
-            jumping = false;
-        }
-
-        if (Input::IsKeyPressed(Key::Space) && m_CameraPosition.y == 0.0f)
+        if (Input::IsKeyPressed(Key::Space))
         {
-            jumping = true;
+            m_CameraPosition.y += m_CameraTranslationSpeed * ts;
         }
-        
-        if (jumping) {
-            m_CameraPosition.y += G * ts;
-            if (m_CameraPosition.y > JUMP_HEIGHT) {
-                jumping = false;
-            }
-        } else {
-            m_CameraPosition.y -= G * ts;
-        }
-
-        if (m_CameraPosition.y < 0.0f) {
-            m_CameraPosition.y = 0.0f;
+        else if (Input::IsKeyPressed(Key::LeftShift))
+        {
+            m_CameraPosition.y -= m_CameraTranslationSpeed * ts;
         }
 
         m_Camera.SetPosition(m_CameraPosition);

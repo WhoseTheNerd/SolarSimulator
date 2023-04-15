@@ -14,9 +14,7 @@ namespace Pandora {
         std::vector<tinyobj::material_t> materials;
         std::string warn, err;
 
-        const std::string MODEL_PATH = "SolarSim/assets/viking_room.obj";
-
-        if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str()))
+        if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filepath))
         {
             throw std::runtime_error(warn + err);
         }

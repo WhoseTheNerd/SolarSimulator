@@ -19,12 +19,12 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
-        m_Entity = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/viking_room.obj");
-        m_Entity->SetScale(2.0f);
-        m_Entity->SetRotation({90.0f, 180.0f, 0.0f});
+        m_Entity = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/earth.obj");
+        m_Entity->SetScale(0.25f);
+        m_Entity->SetRotation({0.0f, 0.0f, 23.4f});
         m_Entity->SetPosition({0.0f, -0.5f, 0.0f});
 
-        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/viking_room.png");
+        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/earth.jpg");
         m_Texture->Bind();
 
         m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
@@ -48,31 +48,11 @@ namespace SolarSim {
         m_CameraController.OnUpdate(ts);
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 
-        if (Pandora::Input::IsKeyPressed(Pandora::Key::Up))
-        {
-            glm::vec3 position = m_Entity->GetPosition();
-            position.z -= 20.0f * ts;
-            m_Entity->SetPosition(position);
-        }
-        else if (Pandora::Input::IsKeyPressed(Pandora::Key::Down))
-        {
-            glm::vec3 position = m_Entity->GetPosition();
-            position.z += 20.0f * ts;
-            m_Entity->SetPosition(position);
-        }
-
-        if (Pandora::Input::IsKeyPressed(Pandora::Key::Left))
-        {
-            glm::vec3 position = m_Entity->GetPosition();
-            position.x -= 20.0f * ts;
-            m_Entity->SetPosition(position);
-        }
-        else if (Pandora::Input::IsKeyPressed(Pandora::Key::Right))
-        {
-            glm::vec3 position = m_Entity->GetPosition();
-            position.x += 20.0f * ts;
-            m_Entity->SetPosition(position);
-        }
+        glm::vec3 rotation = m_Entity->GetRotation();
+        // 1 hour = 1 second
+        rotation.y += (360.0f / (24.0f)) * ts;
+        rotation.y = std::fmod(rotation.y, 360.0f);
+        m_Entity->SetRotation(rotation);
 
         m_Shader->SetUniform("u_Model", m_Entity->GetModelMatrix());
     }
