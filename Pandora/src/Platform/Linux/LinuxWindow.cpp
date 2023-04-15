@@ -39,12 +39,15 @@ namespace Pandora {
         m_WindowHandle = glfwCreateWindow(props.Width, props.Height, m_Data.Title.c_str(), nullptr, nullptr);
         PD_CORE_ASSERT(m_WindowHandle, "Failed to create GLFW window!");
 
+
 		m_Context = GraphicsContext::Create(m_WindowHandle);
 		m_Context->Init();
         
         glfwSetWindowUserPointer(m_WindowHandle, &m_Data);
 		glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+		SetVSync(false);
+		
         // Set GLFW callbacks
 		glfwSetWindowSizeCallback(m_WindowHandle, [](GLFWwindow* window, int width, int height)
 		{
