@@ -51,6 +51,8 @@ namespace Pandora {
         case GL_DEBUG_SEVERITY_HIGH:
             PD_CORE_ERROR("[{0}][{1}] {2}", src_str, type_str, message);
             break;
+
+        default: break;
         }
     }
 
@@ -84,6 +86,7 @@ namespace Pandora {
         glDebugMessageCallback(message_callback, nullptr);
 
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_MULTISAMPLE); 
     }   
 
     void OpenGLGraphicsContext::SwapBuffers()
