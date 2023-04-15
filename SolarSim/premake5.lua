@@ -18,7 +18,8 @@ project "SolarSim"
         "src",
         "%{wks.location}/Pandora/src",
         "%{wks.location}/Pandora/vendor/spdlog/include/",
-        "%{wks.location}/Pandora/vendor/glm"
+        "%{wks.location}/Pandora/vendor/glm",
+        "%{wks.location}/Pandora/vendor/tinyobjloader/",
     }
 
     links

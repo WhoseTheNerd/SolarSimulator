@@ -12,7 +12,9 @@ project "Pandora"
         "src/**.hpp",
         "src/**.cpp",
         "vendor/stb_image/stb_image.h",
-        "vendor/stb_image/stb_image.cpp"
+        "vendor/stb_image/stb_image.cpp",
+        "vendor/tinyobjloader/tiny_obj_loader.h",
+        "vendor/tinyobjloader/tiny_obj_loader.cc",
     }
 
     defines
@@ -25,7 +27,8 @@ project "Pandora"
         "src",
         "vendor/spdlog/include/",
         "vendor/glm/",
-        "vendor/stb_image/"
+        "vendor/stb_image/",
+        "vendor/tinyobjloader/",
     }
 
     links

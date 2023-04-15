@@ -2,6 +2,9 @@
 
 #include <GL/glew.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <tiny_obj_loader.h>
+
 namespace SolarSim {
 
     SolarSimLayer::SolarSimLayer()
@@ -23,12 +26,40 @@ namespace SolarSim {
             glm::vec2 TexCoords;
         };
 
-        const std::vector<Vertex> vertices = {
-            {{ 0.5f,  0.5f, 0.0f}, {1.0f, 1.0f}},
-            {{ 0.5f, -0.5f, 0.0f}, {1.0f, 0.0f}},
-            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f}},
-            {{-0.5f,  0.5f, 0.0f}, {0.0f, 1.0f}},
-        };
+        tinyobj::attrib_t attrib;
+        std::vector<tinyobj::shape_t> shapes;
+        std::vector<tinyobj::material_t> materials;
+        std::string warn, err;
+
+        const std::string MODEL_PATH = "SolarSim/assets/viking_room.obj";
+
+        if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str()))
+        {
+            throw std::runtime_error(warn + err);
+        }
+
+        std::vector<Vertex> vertices;
+        std::vector<uint32_t> indices;
+
+        for (const auto& shape : shapes) {
+            for (const auto& index : shape.mesh.indices) {
+                Vertex vertex{};
+
+                vertex.Position = {
+                    attrib.vertices[3 * index.vertex_index + 0],
+                    attrib.vertices[3 * index.vertex_index + 1],
+                    attrib.vertices[3 * index.vertex_index + 2],
+                };
+
+                vertex.TexCoords = {
+                    attrib.texcoords[2 * index.texcoord_index + 0],
+                    1.0f - attrib.texcoords[2 * index.texcoord_index + 1],
+                };
+
+                vertices.push_back(vertex);
+                indices.push_back(indices.size());
+            }
+        }
 
         Pandora::Ref<Pandora::VertexBuffer> vbo = Pandora::VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
         Pandora::BufferLayout layout = {
@@ -39,23 +70,23 @@ namespace SolarSim {
 
         m_VAO->AddVertexBuffer(vbo);
 
-        const std::vector<uint32_t> indices = {
-            0, 1, 3,
-            1, 2, 3
-        };
-
         Pandora::Ref<Pandora::IndexBuffer> ibo = Pandora::IndexBuffer::Create(indices);
         m_VAO->SetIndexBuffer(ibo);
         
         m_VAO->Bind();
 
-        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/wall.jpg");
+        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/viking_room.png");
         m_Texture->Bind();
 
         m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
         m_Shader->Bind();  
         m_Shader->SetUniform("u_Texture", 0);
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
+
+        glm::mat4 model = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3{1, 0, 0});
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3{0, 1, 0});
+        model = glm::translate(model, glm::vec3{0.0f, 0.0f, -0.5f});
+        m_Shader->SetUniform("u_Model", model);
     }
 
     void SolarSimLayer::OnDetach()

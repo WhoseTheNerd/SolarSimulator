@@ -7,11 +7,12 @@ layout(location = 1) in vec2 a_UV;
 out vec2 io_UV;
 
 uniform mat4 u_ViewProjection;
+uniform mat4 u_Model;
 
 void main()
 {
     io_UV = a_UV;
-    gl_Position = u_ViewProjection * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
+    gl_Position = u_ViewProjection * u_Model * vec4(a_Position.x, a_Position.y, a_Position.z, 1.0);
 }
 
 #shader fragment
