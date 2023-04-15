@@ -18,9 +18,9 @@ uniform mat4 u_Model;
 void main()
 {
     io_UV = a_UV;
-    io_Normal = a_Normal;
     io_Color = a_Color;
     io_FragPos = vec3(u_Model * vec4(a_Position, 1.0));
+    io_Normal = mat3(transpose(inverse(u_Model))) * a_Normal;
     gl_Position = u_ViewProjection * u_Model * vec4(a_Position, 1.0);
 }
 
