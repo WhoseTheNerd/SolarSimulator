@@ -13,9 +13,20 @@ struct Vertex
 {
     glm::vec3 Position;
     glm::vec2 TexCoords;
+    glm::vec3 Normal;
+    glm::vec3 Color;
 
     bool operator==(const Vertex& other) const {
         return Position == other.Position && TexCoords == other.TexCoords;
+    }
+
+    static Pandora::BufferLayout GetBufferLayout() {
+        return {
+            { Pandora::ShaderDataType::Float3, "a_Position" },
+            { Pandora::ShaderDataType::Float2, "a_UV" },
+            { Pandora::ShaderDataType::Float3, "a_Normal" },
+            { Pandora::ShaderDataType::Float3, "a_Color" },
+        };
     }
 };
 
@@ -74,6 +85,18 @@ namespace SolarSim {
                     attrib.texcoords[2 * index.texcoord_index + 0],
                     attrib.texcoords[2 * index.texcoord_index + 1],
                 };
+                
+                vertex.Normal = {
+                    attrib.normals[3 * index.normal_index + 0],
+                    attrib.normals[3 * index.normal_index + 1],
+                    attrib.normals[3 * index.normal_index + 2],
+                };
+
+                vertex.Color = {
+                    attrib.colors[3 * index.vertex_index + 0],
+                    attrib.colors[3 * index.vertex_index + 1],
+                    attrib.colors[3 * index.vertex_index + 2],
+                };
 
                 if (uniqueVertices.count(vertex) == 0) {
                     uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
@@ -87,11 +110,7 @@ namespace SolarSim {
         PD_INFO("Vertices: {}", vertices.size());
 
         Pandora::Ref<Pandora::VertexBuffer> vbo = Pandora::VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
-        Pandora::BufferLayout layout = {
-            { Pandora::ShaderDataType::Float3, "a_Position" },
-            { Pandora::ShaderDataType::Float2, "a_UV" }
-        };
-        vbo->SetLayout(layout);
+        vbo->SetLayout(Vertex::GetBufferLayout());
 
         m_VAO->AddVertexBuffer(vbo);
 
@@ -106,6 +125,9 @@ namespace SolarSim {
         m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
         m_Shader->Bind();  
         m_Shader->SetUniform("u_Texture", 0);
+        m_Shader->SetUniform("u_UseTextures", 0);
+        m_Shader->SetUniform("u_LightPos", glm::vec3{2.0f, 2.0f, 2.0f});
+        m_Shader->SetUniform("u_LightColor", Pandora::FromHex("#D3D3D3"));
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 
         glm::mat4 model = glm::rotate(glm::identity<glm::mat4>(), glm::radians(0.0f), glm::vec3{1, 0, 0});

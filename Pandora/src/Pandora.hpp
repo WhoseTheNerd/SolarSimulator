@@ -9,6 +9,7 @@
 #include "Pandora/Core/Input.hpp"
 #include "Pandora/Core/KeyCodes.hpp"
 #include "Pandora/Core/MouseCodes.hpp"
+#include "Pandora/Core/ColorUtil.hpp"
 
 #include "Pandora/Events/Event.hpp"
 #include "Pandora/Events/ApplicationEvent.hpp"
