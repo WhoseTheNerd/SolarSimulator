@@ -44,7 +44,18 @@ uniform vec3 u_LightColor;
 void main()
 {
     if (u_UseTextures) {
-        FragColor = texture(u_Texture, io_UV);
+        vec3 color = texture(u_Texture, io_UV).xyz;
+        float ambientStrength = 0.1;
+        vec3 ambient = ambientStrength * u_LightColor;
+
+        vec3 norm = normalize(io_Normal);
+        vec3 lightDir = normalize(u_LightPos - io_FragPos);
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec3 diffuse = diff * u_LightColor;
+        
+        vec3 result = (ambient + diffuse) * color;
+
+        FragColor = vec4(result, 1.0);
     } else {
         float ambientStrength = 0.1;
         vec3 ambient = ambientStrength * u_LightColor;
@@ -54,7 +65,7 @@ void main()
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = diff * u_LightColor;
         
-        vec3 result = (ambient + diffuse) * io_Color.xyz;
+        vec3 result = (ambient + diffuse) * io_Color;
 
         FragColor = vec4(result, 1.0);
     }

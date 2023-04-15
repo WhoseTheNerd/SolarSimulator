@@ -59,7 +59,7 @@ namespace SolarSim {
         std::vector<tinyobj::material_t> materials;
         std::string warn, err;
 
-        const std::string MODEL_PATH = "SolarSim/assets/suzanne.obj";
+        const std::string MODEL_PATH = "SolarSim/assets/viking_room.obj";
 
         if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, MODEL_PATH.c_str()))
         {
@@ -119,19 +119,19 @@ namespace SolarSim {
         
         m_VAO->Bind();
 
-        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/wall.jpg");
+        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/viking_room.png");
         m_Texture->Bind();
 
         m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
         m_Shader->Bind();  
         m_Shader->SetUniform("u_Texture", 0);
-        m_Shader->SetUniform("u_UseTextures", 0);
-        m_Shader->SetUniform("u_LightPos", glm::vec3{2.0f, 2.0f, 2.0f});
+        m_Shader->SetUniform("u_UseTextures", 1);
+        m_Shader->SetUniform("u_LightPos", glm::vec3{-2.0f, 12.0f, 12.0f});
         m_Shader->SetUniform("u_LightColor", Pandora::FromHex("#D3D3D3"));
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 
-        glm::mat4 model = glm::rotate(glm::identity<glm::mat4>(), glm::radians(0.0f), glm::vec3{1, 0, 0});
-        model = glm::rotate(model, glm::radians(0.0f), glm::vec3{0, 1, 0});
+        glm::mat4 model = glm::rotate(glm::identity<glm::mat4>(), glm::radians(90.0f), glm::vec3{1, 0, 0});
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3{0, 1, 0});
         model = glm::translate(model, glm::vec3{0.0f, 0.0f, -0.5f});
         model = glm::scale(model, glm::vec3{2.0f});
         m_Shader->SetUniform("u_Model", model);
