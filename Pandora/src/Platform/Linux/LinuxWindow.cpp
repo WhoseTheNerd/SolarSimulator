@@ -44,7 +44,6 @@ namespace Pandora {
 		m_Context->Init();
         
         glfwSetWindowUserPointer(m_WindowHandle, &m_Data);
-		glfwSetInputMode(m_WindowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 		SetVSync(false);
 		

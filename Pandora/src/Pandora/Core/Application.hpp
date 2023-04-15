@@ -9,6 +9,8 @@
 #include "Pandora/Events/Event.hpp"
 #include "Pandora/Events/ApplicationEvent.hpp"
 
+#include "Pandora/ImGui/ImGuiLayer.hpp"
+
 namespace Pandora {
 
     class Application
@@ -36,6 +38,8 @@ namespace Pandora {
         Scope<Window> m_Window;
         LayerStack m_LayerStack;
         float m_LastFrameTime = 0.0f;
+
+        ImGuiLayer* m_ImGuiLayer;
     private:
         static Application* s_Instance;
     };

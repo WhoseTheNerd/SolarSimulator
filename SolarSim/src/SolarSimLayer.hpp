@@ -14,7 +14,8 @@ namespace SolarSim {
         virtual void OnDetach() override;
         virtual void OnUpdate(Pandora::Timestep ts) override;
         virtual void OnRender() override;
-        virtual void OnEvent(Pandora::Event& event);
+        virtual void OnEvent(Pandora::Event& event) override;
+        virtual void OnImGuiRender() override;
     private:
         bool OnKeyPressed(Pandora::KeyPressedEvent& e);
     private:
@@ -23,6 +24,8 @@ namespace SolarSim {
         Pandora::Ref<Pandora::Texture2D> m_Texture;
 
         Pandora::PerspectiveCameraController m_CameraController;
+
+        bool m_MouseCaptured = true;
     };
 
 }

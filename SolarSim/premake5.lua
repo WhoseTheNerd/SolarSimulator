@@ -17,14 +17,16 @@ project "SolarSim"
     {
         "src",
         "%{wks.location}/Pandora/src",
-        "%{wks.location}/Pandora/vendor/spdlog/include/",
-        "%{wks.location}/Pandora/vendor/glm",
-        "%{wks.location}/Pandora/vendor/tinyobjloader/",
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.tinyobjloader}",
+        "%{IncludeDir.imgui}"
     }
 
     links
     {
         "Pandora",
+        "ImGui",
         "glfw",
         "GLEW",
         "GL"

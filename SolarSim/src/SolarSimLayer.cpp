@@ -3,6 +3,9 @@
 #include <unordered_map>
 
 #include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include <imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -36,6 +39,10 @@ namespace SolarSim {
         m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 
         m_Shader->SetUniform("u_Model", m_Entity->GetModelMatrix());
+
+        if (m_MouseCaptured) {
+            glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
     }
 
     void SolarSimLayer::OnDetach()
@@ -65,9 +72,21 @@ namespace SolarSim {
         Pandora::RenderCommand::DrawIndexed(m_Entity->GetMesh());
     }
 
+    void SolarSimLayer::OnImGuiRender()
+    {
+        ImGui::Begin("Properties");
+        ImGui::Text("Selected entity: %s", "Earth");
+        glm::vec3 rotation = m_Entity->GetRotation();
+        ImGui::SliderFloat3("Rotation", (float*)&rotation, -360.0f, 360.0f);
+        m_Entity->SetRotation(rotation);
+        ImGui::End();
+    }
+
     void SolarSimLayer::OnEvent(Pandora::Event& event) 
     {
-        m_CameraController.OnEvent(event);
+        if (m_MouseCaptured) {
+            m_CameraController.OnEvent(event);
+        }
 
         Pandora::EventDispatcher dispatcher(event);
         dispatcher.Dispatch<Pandora::KeyPressedEvent>(PD_BIND_EVENT_FN(SolarSimLayer::OnKeyPressed));
@@ -80,7 +99,12 @@ namespace SolarSim {
         switch (e.GetKeyCode())
         {
         case Pandora::Key::Escape:
-            Pandora::Application::Get().SetRunning(false);
+            m_MouseCaptured ^= true;
+            if (m_MouseCaptured) {
+		        glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            } else {
+		        glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            }
             break;
 
         case Pandora::Key::G:

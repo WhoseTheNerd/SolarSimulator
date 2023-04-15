@@ -12,10 +12,11 @@ namespace Pandora {
         Layer() = default;
         virtual ~Layer() = default;
 
-        virtual void OnAttach() = 0;
-        virtual void OnDetach() = 0;
-        virtual void OnUpdate(Timestep ts) = 0;
-        virtual void OnRender() = 0;
-        virtual void OnEvent(Event& event) = 0;
+        virtual void OnAttach() {};
+        virtual void OnDetach() {};
+        virtual void OnUpdate(Timestep ts) {};
+        virtual void OnRender() {};
+        virtual void OnImGuiRender() {};
+        virtual void OnEvent(Event& event) {};
     };
 }

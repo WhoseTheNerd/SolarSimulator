@@ -9,3 +9,6 @@
 [submodule "Pandora/vendor/tinyobjloader"]
 	path = Pandora/vendor/tinyobjloader
 	url = https://github.com/tinyobjloader/tinyobjloader
+[submodule "Pandora/vendor/imgui"]
+	path = Pandora/vendor/imgui
+	url = https://github.com/TheCherno/imgui/

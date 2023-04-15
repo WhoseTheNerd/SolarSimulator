@@ -25,17 +25,19 @@ project "Pandora"
     includedirs
     {
         "src",
-        "vendor/spdlog/include/",
-        "vendor/glm/",
-        "vendor/stb_image/",
-        "vendor/tinyobjloader/",
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.tinyobjloader}",
+        "%{IncludeDir.imgui}"
     }
 
     links
     {
         "glfw",
         "GLEW",
-        "GL"
+        "GL",
+        "ImGui"
     }
 
     filter "configurations:Debug"
