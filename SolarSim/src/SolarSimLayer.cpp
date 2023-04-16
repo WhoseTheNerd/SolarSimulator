@@ -30,55 +30,46 @@ namespace SolarSim {
         m_Texture = Pandora::Texture2D::Create("SolarSim/assets/earth.jpg");
         m_Texture->Bind();
 
-        m_Shader = Pandora::Shader::Create("SolarSim/assets/basic.shader");
-        m_Shader->Bind();  
-        m_Shader->SetUniform("u_Texture", 0);
-        m_Shader->SetUniform("u_UseTextures", 1);
-        m_Shader->SetUniform("u_LightPos", glm::vec3{-2.0f, 12.0f, 12.0f});
-        m_Shader->SetUniform("u_LightColor", Pandora::FromHex("#D3D3D3"));
-        m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
-
-        m_Shader->SetUniform("u_Model", m_Entity->GetModelMatrix());
-
         if (m_MouseCaptured) {
             glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
+
+        Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
+        Pandora::Renderer3D::Init();
     }
 
     void SolarSimLayer::OnDetach()
-    {
-
+    { 
+        Pandora::Renderer3D::Shutdown();
     }
 
     void SolarSimLayer::OnUpdate(Pandora::Timestep ts)
     {
         m_CameraController.OnUpdate(ts);
-        m_Shader->SetUniform("u_ViewProjection", m_CameraController.GetCamera().GetViewProjectionMatrix());
 
         glm::vec3 rotation = m_Entity->GetRotation();
         // 1 hour = 1 second
         rotation.y += (360.0f / (24.0f)) * ts;
         rotation.y = std::fmod(rotation.y, 360.0f);
         m_Entity->SetRotation(rotation);
-
-        m_Shader->SetUniform("u_Model", m_Entity->GetModelMatrix());
     }
 
     void SolarSimLayer::OnRender()
     {
-        Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
-        Pandora::RenderCommand::Clear();
-        
-        Pandora::RenderCommand::DrawIndexed(m_Entity->GetMesh());
+        Pandora::Renderer3D::BeginScene(m_CameraController.GetCamera());
+        Pandora::Renderer3D::DrawEntity(m_Entity, m_Texture);
+        Pandora::Renderer3D::EndScene();
     }
 
     void SolarSimLayer::OnImGuiRender()
     {
         ImGui::Begin("Properties");
         ImGui::Text("Selected entity: %s", "Earth");
+        
         glm::vec3 rotation = m_Entity->GetRotation();
         ImGui::SliderFloat3("Rotation", (float*)&rotation, -360.0f, 360.0f);
         m_Entity->SetRotation(rotation);
+
         ImGui::End();
     }
 

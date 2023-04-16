@@ -29,3 +29,4 @@
 #include "Pandora/Graphics/PerspectiveCameraController.hpp"
 #include "Pandora/Graphics/Mesh.hpp"
 #include "Pandora/Graphics/Entity.hpp"
+#include "Pandora/Graphics/Renderer3D.hpp"

@@ -13,10 +13,10 @@ namespace Pandora {
     {
         m_Model = glm::identity<glm::mat4>();
         m_Model = glm::translate(m_Model, m_Position);
-        m_Model = glm::scale(m_Model, m_Scale);
         m_Model = glm::rotate(m_Model, glm::radians(m_Rotation.x), {1.0f, 0.0f, 0.0f});
         m_Model = glm::rotate(m_Model, glm::radians(m_Rotation.y), {0.0f, 1.0f, 0.0f});
         m_Model = glm::rotate(m_Model, glm::radians(m_Rotation.z), {0.0f, 0.0f, 1.0f});
+        m_Model = glm::scale(m_Model, m_Scale);
     }
 
 }
