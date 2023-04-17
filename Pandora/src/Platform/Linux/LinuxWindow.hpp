@@ -23,6 +23,8 @@ namespace Pandora {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override { return m_Data.VSync; }
 
+		virtual void SetWindowTitle(const std::string& title) override;
+
         virtual void* GetNativeWindow() const override { return m_WindowHandle; }
     private:
         GLFWwindow* m_WindowHandle;

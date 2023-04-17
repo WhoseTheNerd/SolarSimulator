@@ -25,11 +25,15 @@ namespace Pandora {
 
 		if (Input::IsKeyPressed(Key::W))
 		{
-            m_CameraPosition += (m_CameraTranslationSpeed * ts) * m_Camera.GetFront();
+            glm::vec3 front = m_Camera.GetFront();
+            front.y = 0.0f;
+            m_CameraPosition += (m_CameraTranslationSpeed * ts) * glm::normalize(front);
 		}
 		else if (Input::IsKeyPressed(Key::S))
 		{
-            m_CameraPosition -= (m_CameraTranslationSpeed * ts) * m_Camera.GetFront();
+            glm::vec3 front = m_Camera.GetFront();
+            front.y = 0.0f;
+            m_CameraPosition -= (m_CameraTranslationSpeed * ts) * glm::normalize(front);
 		}
         m_CameraPosition.y = y;
 

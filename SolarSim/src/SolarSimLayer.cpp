@@ -45,6 +45,13 @@ namespace SolarSim {
 
     void SolarSimLayer::OnUpdate(Pandora::Timestep ts)
     {
+        char buf[80];
+        int written = snprintf(buf, sizeof(buf), "Solar system simulator - %d fps", static_cast<uint32_t>(std::round(1.0f / ts)));
+        if (written >= sizeof(buf)) {
+            PD_WARN("Output truncated!");
+        }
+        Pandora::Application::Get().GetWindow().SetWindowTitle(buf);
+
         m_CameraController.OnUpdate(ts);
 
         glm::vec3 rotation = m_Entity->GetRotation();

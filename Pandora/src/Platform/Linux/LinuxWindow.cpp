@@ -152,4 +152,10 @@ namespace Pandora {
 
         m_Data.VSync = enabled;
     }
+
+	void LinuxWindow::SetWindowTitle(const std::string& title)
+	{
+		m_Data.Title = title;
+		glfwSetWindowTitle(m_WindowHandle, title.c_str());
+	}
 }
