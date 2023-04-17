@@ -31,4 +31,41 @@ namespace Pandora {
     {
         glDrawElements(GL_TRIANGLES, mesh->GetVAO()->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
     }
+
+    void OpenGLRendererAPI::SetPolygonMode(Face face, PolygonMode mode)
+    {
+        GLenum glface;
+        switch (face)
+        {
+        case Face::Front:
+            glface = GL_FRONT;
+            break;
+        case Face::Back:
+            glface = GL_BACK;
+            break;
+        case Face::FrontAndBack:
+            glface = GL_FRONT_AND_BACK;
+            break;
+        default:
+            PD_CORE_ASSERT(false, "End of unreachable switch statement!");
+        }
+
+        GLenum glmode;
+        switch (mode)
+        {
+        case PolygonMode::Fill:
+            glmode = GL_FILL;
+            break;
+        case PolygonMode::Line:
+            glmode = GL_LINE;
+            break;
+        case PolygonMode::Point:
+            glmode = GL_POINT;
+            break;
+
+        default: PD_CORE_ASSERT(false, "End of unreachable switch statement!");
+        }
+
+        glPolygonMode(glface, glmode);
+    }
 }

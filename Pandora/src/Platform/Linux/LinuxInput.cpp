@@ -42,4 +42,21 @@ namespace Pandora {
 		auto[x, y] = GetMousePositionImpl();
 		return y;
 	}
+
+	void LinuxInput::SetInputModeImpl(InputMode inputMode)
+	{
+		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
+		switch (inputMode)
+		{
+		case InputMode::Normal:
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			break;
+		case InputMode::Capture:
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			break;
+		case InputMode::Hidden:
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			break;
+		}
+	}
 }

@@ -31,7 +31,7 @@ namespace SolarSim {
         m_Texture->Bind();
 
         if (m_MouseCaptured) {
-            glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
         }
 
         Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
@@ -99,18 +99,18 @@ namespace SolarSim {
         case Pandora::Key::Escape:
             m_MouseCaptured ^= true;
             if (m_MouseCaptured) {
-		        glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+                Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
             } else {
-		        glfwSetInputMode((GLFWwindow*)Pandora::Application::Get().GetWindow().GetNativeWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                Pandora::Input::SetInputMode(Pandora::InputMode::Normal);
             }
             break;
 
         case Pandora::Key::G:
             wireframe_mode ^= true;
             if (wireframe_mode) {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                Pandora::RenderCommand::SetPolygonMode(Pandora::Face::FrontAndBack, Pandora::PolygonMode::Line);
             } else {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                Pandora::RenderCommand::SetPolygonMode(Pandora::Face::FrontAndBack, Pandora::PolygonMode::Fill);
             }
             break;
 

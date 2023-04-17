@@ -26,6 +26,11 @@ namespace Pandora {
 		{
 			s_RendererAPI->DrawIndexed(mesh);
 		}
+
+		inline static void SetPolygonMode(Face face, PolygonMode mode)
+		{
+			s_RendererAPI->SetPolygonMode(face, mode);
+		}
 	private:
 		static inline Scope<RendererAPI> s_RendererAPI = RendererAPI::Create();
     };

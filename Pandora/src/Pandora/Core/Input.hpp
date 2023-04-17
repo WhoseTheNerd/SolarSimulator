@@ -6,6 +6,11 @@
 
 namespace Pandora {
 
+	enum class InputMode
+	{
+		Normal, Capture, Hidden
+	};
+
     class Input
     {
     public:
@@ -15,6 +20,8 @@ namespace Pandora {
 		inline static std::pair<float, float> GetMousePosition() { return s_Instance->GetMousePositionImpl(); }
 		inline static float GetMouseX() { return s_Instance->GetMouseXImpl(); }
 		inline static float GetMouseY() { return s_Instance->GetMouseYImpl(); }
+
+		inline static void SetInputMode(InputMode inputMode) { s_Instance->SetInputModeImpl(inputMode); }
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) = 0;
 
@@ -22,6 +29,8 @@ namespace Pandora {
 		virtual std::pair<float, float> GetMousePositionImpl() = 0;
 		virtual float GetMouseXImpl() = 0;
 		virtual float GetMouseYImpl() = 0;
+
+		virtual void SetInputModeImpl(InputMode inputMode) = 0;
 	private:
 		static Scope<Input> s_Instance;
     };

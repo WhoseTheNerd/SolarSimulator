@@ -13,5 +13,7 @@ namespace Pandora {
 		virtual std::pair<float, float> GetMousePositionImpl() override;
 		virtual float GetMouseXImpl() override;
 		virtual float GetMouseYImpl() override;
+		
+		virtual void SetInputModeImpl(InputMode inputMode) override;
     };
 }

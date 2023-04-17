@@ -9,6 +9,16 @@
 
 namespace Pandora {
 
+    enum class Face
+    {
+        Front, Back, FrontAndBack
+    };
+
+    enum class PolygonMode
+    {
+        Point, Line, Fill
+    };
+
     class RendererAPI
     {
     public:
@@ -19,6 +29,8 @@ namespace Pandora {
 		virtual void Clear() = 0;
 
 		virtual void DrawIndexed(const Ref<Mesh>& mesh) = 0;
+
+        virtual void SetPolygonMode(Face face, PolygonMode mode) = 0;
 
         static Scope<RendererAPI> Create();
     };
