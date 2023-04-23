@@ -32,6 +32,9 @@ project "SolarSim"
         "GL"
     }
 
+    linkoptions { "-fuse-ld=mold" }
+    buildoptions { "-pipe" }
+
     filter "configurations:Debug"
         defines "PD_DEBUG"
         runtime "Debug"
