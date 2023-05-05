@@ -34,6 +34,41 @@ namespace SolarSim {
             mercury->SetScale(5.0f);
             mercury->SetPosition({5.0f, -0.5f, 0.0f});
             m_Planets.push_back(mercury);
+
+            auto mars = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/Mars.obj", "SolarSim/assets/Mars.png");
+            mars->SetScale(0.5f);
+            mars->SetPosition({-5.0f, -0.5f, 0.0f});
+            m_Planets.push_back(mars);
+
+            auto venus = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/Venus.obj", "SolarSim/assets/Venus.png");
+            venus->SetScale(0.5f);
+            venus->SetPosition({-10.0f, -0.5f, 0.0f});
+            m_Planets.push_back(venus);
+
+            auto jupiter = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Jupiter.png");
+            jupiter->SetScale(0.5f);
+            jupiter->SetPosition({-15.0f, -0.5f, 0.0f});
+            m_Planets.push_back(jupiter);
+
+            auto saturn = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Saturn.png");
+            saturn->SetScale(0.5f);
+            saturn->SetPosition({-20.0f, -0.5f, 0.0f});
+            m_Planets.push_back(saturn);
+
+            auto uranus = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Uranus.png");
+            uranus->SetScale(0.5f);
+            uranus->SetPosition({-25.0f, -0.5f, 0.0f});
+            m_Planets.push_back(uranus);
+
+            auto neptune = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Neptune.png");
+            neptune->SetScale(0.5f);
+            neptune->SetPosition({-30.0f, -0.5f, 0.0f});
+            m_Planets.push_back(neptune);
+
+            auto pluto = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Pluto.png");
+            pluto->SetScale(0.5f);
+            pluto->SetPosition({-35.0f, -0.5f, 0.0f});
+            m_Planets.push_back(pluto);
         }
 
         if (m_MouseCaptured) {

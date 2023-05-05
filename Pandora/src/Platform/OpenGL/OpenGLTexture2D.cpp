@@ -12,7 +12,6 @@ namespace Pandora {
 
     OpenGLTexture2D::OpenGLTexture2D(const char* filepath)
     {
-
         int width, height, channels;
         stbi_set_flip_vertically_on_load(true); 
         uint8_t* data = stbi_load(filepath, &width, &height, &channels, 4);
