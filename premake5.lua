@@ -21,6 +21,7 @@ IncludeDir["glm"] = "%{wks.location}/Pandora/vendor/glm"
 IncludeDir["tinyobjloader"] = "%{wks.location}/Pandora/vendor/tinyobjloader/"
 IncludeDir["stb_image"] = "%{wks.location}/Pandora/vendor/stb_image/"
 IncludeDir["imgui"] = "%{wks.location}/Pandora/vendor/imgui/"
+IncludeDir["toml"] = "%{wks.location}/Pandora/vendor/tomlplusplus/"
 
 include "Pandora/vendor/imgui"
 

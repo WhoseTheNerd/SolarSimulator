@@ -12,3 +12,6 @@
 [submodule "Pandora/vendor/imgui"]
 	path = Pandora/vendor/imgui
 	url = https://github.com/TheCherno/imgui/
+[submodule "Pandora/vendor/tomlplusplus"]
+	path = Pandora/vendor/tomlplusplus
+	url = https://github.com/marzer/tomlplusplus

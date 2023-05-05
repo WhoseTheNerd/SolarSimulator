@@ -29,7 +29,8 @@ project "Pandora"
         "%{IncludeDir.glm}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.tinyobjloader}",
-        "%{IncludeDir.imgui}"
+        "%{IncludeDir.imgui}",
+        "%{IncludeDir.toml}"
     }
 
     links

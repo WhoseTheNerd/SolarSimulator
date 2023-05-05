@@ -1,0 +1,67 @@
+[planets]
+names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+positional_constant = 25.0
+camera_speed = 30.0
+
+[Mercury]
+mass = 3.285e23
+radius = 2439.7e3
+distance = 58e9
+model = "Mercury.obj"
+texture = "Mercury.png"
+
+[Venus]
+mass = 4.867e24
+radius = 6051.8e3
+distance = 107.58e9
+model = "Venus.obj"
+texture = "Venus.png"
+
+[Earth]
+mass = 5.972e24
+radius = 6371e3
+distance = 150.88e9
+model = "earth.obj"
+texture = "earth.jpg"
+
+[Mars]
+mass = 6.39e23
+radius = 3389.5e3
+distance = 267.73e9
+model = "Mars.obj"
+texture = "Mars.png"
+
+[Jupiter]
+mass = 1.898e27
+radius = 69911e3
+distance = 741.1e9
+model = "sphere.obj"
+texture = "Jupiter.png"
+
+[Saturn]
+mass = 5.683e26
+radius = 58232e3
+distance = 1.4648e12
+model = "sphere.obj"
+texture = "Saturn.png"
+
+[Uranus]
+mass = 8.681e25
+radius = 25362e3
+distance = 2.9387e12
+model = "sphere.obj"
+texture = "Uranus.png"
+
+[Neptune]
+mass = 1.024e26
+radius = 24622e3
+distance = 4.4732e12
+model = "sphere.obj"
+texture = "Neptune.png"
+
+[Pluto]
+mass = 1.30900e22
+radius = 1188.3e3
+distance = 5.9e12
+model = "sphere.obj"
+texture = "Pluto.png"

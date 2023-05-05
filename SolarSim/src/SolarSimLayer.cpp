@@ -10,6 +10,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+#include <toml.hpp>
+#include <iostream>
+
 namespace SolarSim {
 
     SolarSimLayer::SolarSimLayer()
@@ -23,53 +26,30 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
-        {
-            auto earth = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/earth.obj", "SolarSim/assets/earth.jpg");
-            earth->SetScale(0.25f);
-            earth->SetRotation({0.0f, 0.0f, 23.4f});
-            earth->SetPosition({0.0f, -0.5f, 0.0f});
-            m_Planets.push_back(earth);
+        toml::table planets_file = toml::parse_file("SolarSim/assets/planets.toml");
+        auto planets_list = planets_file["planets"]["names"].as_array();
 
-            auto mercury = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/Mercury.obj", "SolarSim/assets/Mercury.png");
-            mercury->SetScale(5.0f);
-            mercury->SetPosition({5.0f, -0.5f, 0.0f});
-            m_Planets.push_back(mercury);
+        const float positional_constant = planets_file["planets"]["positional_constant"].value_or(5.0f);
 
-            auto mars = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/Mars.obj", "SolarSim/assets/Mars.png");
-            mars->SetScale(0.5f);
-            mars->SetPosition({-5.0f, -0.5f, 0.0f});
-            m_Planets.push_back(mars);
+        const float camera_speed = planets_file["planets"]["camera_speed"].value_or(5.0f);
+        m_CameraController.SetTranslationSpeed(camera_speed);
 
-            auto venus = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/Venus.obj", "SolarSim/assets/Venus.png");
-            venus->SetScale(0.5f);
-            venus->SetPosition({-10.0f, -0.5f, 0.0f});
-            m_Planets.push_back(venus);
+        int i = 0;
+        planets_list->for_each([&](auto&& el) {
+            const std::string name = el.value_or("");
+            
+            const std::string modelpath = std::string("SolarSim/assets/") + planets_file[name]["model"].value_or("");
+            const std::string texturepath = std::string("SolarSim/assets/") + planets_file[name]["texture"].value_or("");
 
-            auto jupiter = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Jupiter.png");
-            jupiter->SetScale(0.5f);
-            jupiter->SetPosition({-15.0f, -0.5f, 0.0f});
-            m_Planets.push_back(jupiter);
+            const float radius = planets_file[name]["radius"].value_or(1.0f);
+            const float scale = radius / planets_file["Earth"]["radius"].value_or(1.0f);
 
-            auto saturn = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Saturn.png");
-            saturn->SetScale(0.5f);
-            saturn->SetPosition({-20.0f, -0.5f, 0.0f});
-            m_Planets.push_back(saturn);
-
-            auto uranus = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Uranus.png");
-            uranus->SetScale(0.5f);
-            uranus->SetPosition({-25.0f, -0.5f, 0.0f});
-            m_Planets.push_back(uranus);
-
-            auto neptune = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Neptune.png");
-            neptune->SetScale(0.5f);
-            neptune->SetPosition({-30.0f, -0.5f, 0.0f});
-            m_Planets.push_back(neptune);
-
-            auto pluto = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/sphere.obj", "SolarSim/assets/Pluto.png");
-            pluto->SetScale(0.5f);
-            pluto->SetPosition({-35.0f, -0.5f, 0.0f});
-            m_Planets.push_back(pluto);
-        }
+            auto planet = Pandora::CreateRef<Pandora::Entity>(modelpath.c_str(), texturepath.c_str());
+            planet->SetPosition({positional_constant * i, -0.5f, 0.0f});
+            planet->SetScale({scale});
+            m_Planets.push_back(planet);
+            i++;
+        });
 
         if (m_MouseCaptured) {
             Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
@@ -137,6 +117,10 @@ namespace SolarSim {
     {
         ImGui::Begin("Properties");
         ImGui::Text("Selected entity: %s", "Earth");
+
+        float camera_speed = m_CameraController.GetTranslationSpeed();
+        ImGui::SliderFloat("Camera speed", &camera_speed, 1.0f, 100.0f);
+        m_CameraController.SetTranslationSpeed(camera_speed);
         
         /*glm::vec3 rotation = m_Planets[0]->GetRotation();
         ImGui::SliderFloat3("Rotation", (float*)&rotation, -360.0f, 360.0f);

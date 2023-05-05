@@ -27,6 +27,9 @@ namespace Pandora {
 		void SetCameraPitch(float pitch) { m_CameraPitch = pitch; m_Camera.SetPitch(pitch); }
 
 		void SetFirstMouseEvent(bool state) { m_FirstMouseEvent = state; }
+
+		void SetTranslationSpeed(float speed) { m_CameraTranslationSpeed = speed; }
+		float GetTranslationSpeed() const { return m_CameraTranslationSpeed; }
 	private:
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);

@@ -24,6 +24,9 @@ namespace Pandora {
 
 		float GetZoomLevel() const { return m_ZoomLevel; }
 		void SetZoomLevel(float level) { m_ZoomLevel = level; }
+
+		void SetTranslationSpeed(float speed) { m_CameraTranslationSpeed = speed; }
+		float GetTranslationSpeed() const { return m_CameraTranslationSpeed; }
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);

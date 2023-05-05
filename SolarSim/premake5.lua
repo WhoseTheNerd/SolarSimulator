@@ -20,7 +20,8 @@ project "SolarSim"
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.tinyobjloader}",
-        "%{IncludeDir.imgui}"
+        "%{IncludeDir.imgui}",
+        "%{IncludeDir.toml}"
     }
 
     links
