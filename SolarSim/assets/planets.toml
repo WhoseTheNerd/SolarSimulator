@@ -1,12 +1,19 @@
 [planets]
-names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
-positional_constant = 25.0
+names = ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
+positional_constant = 200.0
 
 [camera]
-speed = 30.0
-yaw = -39.12
-pitch = -19.91
-position = [23.45, 19.10, 44.07]
+speed = 150.0
+yaw = -26.55
+pitch = -20.79
+position = [552.35, 37.05, 50.06]
+
+[Sun]
+mass = 1.989e30
+radius = 696340e3
+distance = 0
+model = "sphere.obj"
+texture = "Sun.png"
 
 [Mercury]
 mass = 3.285e23

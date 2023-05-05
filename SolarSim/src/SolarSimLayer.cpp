@@ -128,7 +128,7 @@ namespace SolarSim {
         ImGui::Text("Camera Yaw & Pitch: %.2f & %.2f", m_CameraController.GetCamera().GetYaw(), m_CameraController.GetCamera().GetPitch());
 
         float camera_speed = m_CameraController.GetTranslationSpeed();
-        ImGui::SliderFloat("Camera speed", &camera_speed, 1.0f, 100.0f);
+        ImGui::SliderFloat("Camera speed", &camera_speed, 80.0f, 500.0f);
         m_CameraController.SetTranslationSpeed(camera_speed);
         
         /*glm::vec3 rotation = m_Planets[0]->GetRotation();
