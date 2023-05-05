@@ -23,13 +23,10 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
-        m_Entity = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/earth.obj");
+        m_Entity = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/earth.obj", "SolarSim/assets/earth.jpg");
         m_Entity->SetScale(0.25f);
         m_Entity->SetRotation({0.0f, 0.0f, 23.4f});
         m_Entity->SetPosition({0.0f, -0.5f, 0.0f});
-
-        m_Texture = Pandora::Texture2D::Create("SolarSim/assets/earth.jpg");
-        m_Texture->Bind();
 
         if (m_MouseCaptured) {
             Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
@@ -85,7 +82,7 @@ namespace SolarSim {
     void SolarSimLayer::OnRender()
     {
         Pandora::Renderer3D::BeginScene(m_CameraController.GetCamera());
-        Pandora::Renderer3D::DrawEntity(m_Entity, m_Texture);
+        Pandora::Renderer3D::DrawEntity(m_Entity);
         Pandora::Renderer3D::EndScene();
     }
 

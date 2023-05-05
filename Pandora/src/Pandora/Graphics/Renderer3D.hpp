@@ -18,6 +18,5 @@ namespace Pandora {
         static void EndScene();
 
         static void DrawEntity(const Ref<Entity>& entity);
-        static void DrawEntity(const Ref<Entity>& entity, Ref<Texture2D> texture);
     };
 }

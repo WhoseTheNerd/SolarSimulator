@@ -3,6 +3,7 @@
 #include "Pandora/Core/Base.hpp"
 
 #include "Pandora/Graphics/Mesh.hpp"
+#include "Pandora/Graphics/Texture.hpp"
 
 #include <glm/glm.hpp>
 
@@ -11,7 +12,7 @@ namespace Pandora {
     class Entity
     {
     public:
-        Entity(const char* filepath);
+        Entity(const char* filepath, const char* texturepath);
 
         const glm::mat4& GetModelMatrix() const { return m_Model; }
 
@@ -26,11 +27,13 @@ namespace Pandora {
         const glm::vec3& GetRotation() const { return m_Rotation; }
 
         const Ref<Mesh>& GetMesh() const { return m_Mesh; }
+        const Ref<Texture2D>& GetTexture() const { return m_Texture; }
 
     private:
         void CalculateModelMatrix();
     private:
         Ref<Mesh> m_Mesh;
+        Ref<Texture2D> m_Texture;
         
         glm::mat4 m_Model;
 

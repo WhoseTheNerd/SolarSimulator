@@ -4,8 +4,8 @@
 
 namespace Pandora {
 
-    Entity::Entity(const char* filepath)
-        : m_Mesh(CreateRef<Mesh>(filepath)), m_Model(1.0f), m_Position(0.0f), m_Scale(1.0f), m_Rotation(0.0f)
+    Entity::Entity(const char* filepath, const char* texturepath)
+        : m_Mesh(CreateRef<Mesh>(filepath)), m_Texture(Texture2D::Create(texturepath)), m_Model(1.0f), m_Position(0.0f), m_Scale(1.0f), m_Rotation(0.0f)
     {
     }
 

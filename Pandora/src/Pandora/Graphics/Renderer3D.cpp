@@ -40,18 +40,9 @@ namespace Pandora {
     {
 
     }
-
     void Renderer3D::DrawEntity(const Ref<Entity>& entity)
     {
-        s_Data->ShaderProgram->SetUniform("u_UseTextures", 0);
-        s_Data->ShaderProgram->SetUniform("u_Model", entity->GetModelMatrix());
-
-        RenderCommand::DrawIndexed(entity->GetMesh());
-    }
-
-    void Renderer3D::DrawEntity(const Ref<Entity>& entity, Ref<Texture2D> texture)
-    {
-        texture->Bind();
+        entity->GetTexture()->Bind();
         s_Data->ShaderProgram->SetUniform("u_UseTextures", 1);
         s_Data->ShaderProgram->SetUniform("u_Texture", 0);
         s_Data->ShaderProgram->SetUniform("u_Model", entity->GetModelMatrix());
