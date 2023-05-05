@@ -1,8 +1,15 @@
 #pragma once
 
+#define USE_CACHING 1
+
 #include "Pandora/Graphics/Shader.hpp"
 
+#if USE_CACHING
+#include <unordered_map>
+#endif
+
 namespace Pandora {
+
 
     class OpenGLShader : public Shader
     {
@@ -24,5 +31,9 @@ namespace Pandora {
         int CompileShader(const char* source, uint32_t type);
     private:
         uint32_t m_ProgramHandle;
+
+        #if USE_CACHING
+        mutable std::unordered_map<std::string, int> m_UniformLocations;
+        #endif
     };
 }

@@ -87,7 +87,17 @@ namespace Pandora {
 
     int OpenGLShader::GetShaderUniformLocation(const char* name) const
     {
+    #if USE_CACHING
+        if (m_UniformLocations.find(name) != m_UniformLocations.end()) {
+            return m_UniformLocations[name];
+        } else {
+            int location = glGetUniformLocation(m_ProgramHandle, name);
+            m_UniformLocations[name] = location;
+            return location;
+        }
+    #else
         return glGetUniformLocation(m_ProgramHandle, name);
+    #endif
     }
 
     int OpenGLShader::CreateShader(const char* vertexSource, const char* fragmentSource)

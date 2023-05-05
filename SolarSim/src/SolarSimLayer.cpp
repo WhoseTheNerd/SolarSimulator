@@ -50,12 +50,28 @@ namespace SolarSim {
 
     void SolarSimLayer::OnUpdate(Pandora::Timestep ts)
     {
-        char buf[80];
-        int written = snprintf(buf, sizeof(buf), "Solar system simulator - %d fps", static_cast<uint32_t>(std::round(1.0f / ts)));
-        if (written >= sizeof(buf)) {
-            PD_WARN("Output truncated!");
+        static float startTime = 0.0f;
+        static double sum = 0.0;
+        static uint64_t count = 0;
+
+        const float fps = 1.0f / ts;
+        sum += fps;
+        count++;
+
+        const float endTime = Pandora::Platform::GetTime();
+        const float duration = endTime - startTime;
+        if (duration >= 1.0f) {
+            char buf[80];
+            int written = snprintf(buf, sizeof(buf), "Solar system simulator - %d fps", static_cast<uint32_t>(std::round(sum / static_cast<double>(count))));
+            if (written >= sizeof(buf)) {
+                PD_WARN("Output truncated!");
+            }
+            Pandora::Application::Get().GetWindow().SetWindowTitle(buf);
+            sum = 0.0;
+            count = 0;
+
+            startTime = endTime;
         }
-        Pandora::Application::Get().GetWindow().SetWindowTitle(buf);
 
         m_CameraController.OnUpdate(ts);
 
