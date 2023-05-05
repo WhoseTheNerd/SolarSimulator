@@ -21,6 +21,12 @@ namespace Pandora {
 
 		PerspectiveCamera& GetCamera() { return m_Camera; }
 		const PerspectiveCamera& GetCamera() const { return m_Camera; }
+
+		void SetCameraPosition(const glm::vec3& pos) { m_CameraPosition = pos; }
+		void SetCameraYaw(float yaw) { m_CameraYaw = yaw; m_Camera.SetYaw(yaw); }
+		void SetCameraPitch(float pitch) { m_CameraPitch = pitch; m_Camera.SetPitch(pitch); }
+
+		void SetFirstMouseEvent(bool state) { m_FirstMouseEvent = state; }
 	private:
 		bool OnMouseMoved(MouseMovedEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
@@ -28,9 +34,11 @@ namespace Pandora {
 		float m_AspectRatio;
 		PerspectiveCamera m_Camera;
 
-		glm::vec3 m_CameraPosition = { -0.344802f, 0.0f, 2.33222f };
+		glm::vec3 m_CameraPosition;
         float m_CameraYaw = -90.0f;
         float m_CameraPitch = 0.0f;
 		float m_CameraTranslationSpeed = 5.0f;
+
+		bool m_FirstMouseEvent = true;
     };
 }

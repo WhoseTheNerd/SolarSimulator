@@ -8,6 +8,7 @@
 #include <imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 namespace SolarSim {
 
@@ -36,6 +37,10 @@ namespace SolarSim {
 
         Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
         Pandora::Renderer3D::Init();
+
+        m_CameraController.SetCameraPosition({-0.885036, 3.513909, 8.005553});
+        m_CameraController.SetCameraPitch(-27.0f);
+        m_CameraController.SetCameraYaw(-84.5047f);
     }
 
     void SolarSimLayer::OnDetach()
@@ -99,6 +104,7 @@ namespace SolarSim {
         case Pandora::Key::Escape:
             m_MouseCaptured ^= true;
             if (m_MouseCaptured) {
+                m_CameraController.SetFirstMouseEvent(true);
                 Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
             } else {
                 Pandora::Input::SetInputMode(Pandora::InputMode::Normal);

@@ -68,11 +68,15 @@ namespace Pandora {
 
         constexpr float mouseSensitivity = 0.1f;
 
-        float xoffset = e.GetX() - lastX;
-        float yoffset = lastY - e.GetY();
+        if (m_FirstMouseEvent) {
+            m_FirstMouseEvent = false;
+            lastX = e.GetX();
+            lastY = e.GetY();
+            return false;
+        }
 
-        xoffset *= mouseSensitivity;
-        yoffset *= mouseSensitivity;
+        const float xoffset = (e.GetX() - lastX) * mouseSensitivity;
+        const float yoffset = (lastY - e.GetY()) * mouseSensitivity;
 
         lastX = e.GetX();
         lastY = e.GetY();
