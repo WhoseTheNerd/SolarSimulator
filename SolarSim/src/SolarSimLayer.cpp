@@ -31,8 +31,18 @@ namespace SolarSim {
 
         const float positional_constant = planets_file["planets"]["positional_constant"].value_or(5.0f);
 
-        const float camera_speed = planets_file["planets"]["camera_speed"].value_or(5.0f);
+        const float camera_speed = planets_file["camera"]["speed"].value_or(5.0f);
+
+        const float camera_pitch = planets_file["camera"]["pitch"].value_or(-90.0f);
+        const float camera_yaw = planets_file["camera"]["yaw"].value_or(0.0f);
+        const float camera_pos_x = planets_file["camera"]["position"].as_array()->at(0).value_or(0.0f);
+        const float camera_pos_y = planets_file["camera"]["position"].as_array()->at(1).value_or(0.0f);
+        const float camera_pos_z = planets_file["camera"]["position"].as_array()->at(2).value_or(0.0f);
+
         m_CameraController.SetTranslationSpeed(camera_speed);
+        m_CameraController.SetCameraPitch(camera_pitch);
+        m_CameraController.SetCameraYaw(camera_yaw);
+        m_CameraController.SetCameraPosition(glm::vec3{camera_pos_x, camera_pos_y, camera_pos_z});
 
         int i = 0;
         planets_list->for_each([&](auto&& el) {
@@ -57,10 +67,6 @@ namespace SolarSim {
 
         Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
         Pandora::Renderer3D::Init();
-
-        m_CameraController.SetCameraPosition({-0.885036, 3.513909, 8.005553});
-        m_CameraController.SetCameraPitch(-27.0f);
-        m_CameraController.SetCameraYaw(-84.5047f);
     }
 
     void SolarSimLayer::OnDetach()
@@ -117,6 +123,9 @@ namespace SolarSim {
     {
         ImGui::Begin("Properties");
         ImGui::Text("Selected entity: %s", "Earth");
+
+        ImGui::Text("Camera Position: %.2f %.2f %.2f", m_CameraController.GetCamera().GetPosition().x, m_CameraController.GetCamera().GetPosition().y, m_CameraController.GetCamera().GetPosition().z);
+        ImGui::Text("Camera Yaw & Pitch: %.2f & %.2f", m_CameraController.GetCamera().GetYaw(), m_CameraController.GetCamera().GetPitch());
 
         float camera_speed = m_CameraController.GetTranslationSpeed();
         ImGui::SliderFloat("Camera speed", &camera_speed, 1.0f, 100.0f);

@@ -1,7 +1,12 @@
 [planets]
 names = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"]
 positional_constant = 25.0
-camera_speed = 30.0
+
+[camera]
+speed = 30.0
+yaw = -39.12
+pitch = -19.91
+position = [23.45, 19.10, 44.07]
 
 [Mercury]
 mass = 3.285e23
