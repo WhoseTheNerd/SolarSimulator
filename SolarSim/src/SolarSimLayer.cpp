@@ -130,10 +130,6 @@ namespace SolarSim {
         float camera_speed = m_CameraController.GetTranslationSpeed();
         ImGui::SliderFloat("Camera speed", &camera_speed, 80.0f, 500.0f);
         m_CameraController.SetTranslationSpeed(camera_speed);
-        
-        /*glm::vec3 rotation = m_Planets[0]->GetRotation();
-        ImGui::SliderFloat3("Rotation", (float*)&rotation, -360.0f, 360.0f);
-        m_Planets[0]->SetRotation(rotation);*/
 
         ImGui::End();
     }
