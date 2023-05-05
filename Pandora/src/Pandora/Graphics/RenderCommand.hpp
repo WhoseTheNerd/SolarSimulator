@@ -24,6 +24,7 @@ namespace Pandora {
 
 		inline static void DrawIndexed(const Ref<Mesh>& mesh)
 		{
+			mesh->Bind();
 			s_RendererAPI->DrawIndexed(mesh);
 		}
 

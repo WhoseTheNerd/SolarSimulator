@@ -63,8 +63,10 @@ namespace Pandora {
 
         m_VAO->AddVertexBuffer(vbo);
         m_VAO->SetIndexBuffer(ibo);
-        m_VAO->Bind();
+    }
 
-        
+    void Mesh::Bind() const
+    {
+        m_VAO->Bind();
     }
 }

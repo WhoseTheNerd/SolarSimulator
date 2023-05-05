@@ -23,10 +23,18 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
-        m_Entity = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/earth.obj", "SolarSim/assets/earth.jpg");
-        m_Entity->SetScale(0.25f);
-        m_Entity->SetRotation({0.0f, 0.0f, 23.4f});
-        m_Entity->SetPosition({0.0f, -0.5f, 0.0f});
+        {
+            auto earth = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/earth.obj", "SolarSim/assets/earth.jpg");
+            earth->SetScale(0.25f);
+            earth->SetRotation({0.0f, 0.0f, 23.4f});
+            earth->SetPosition({0.0f, -0.5f, 0.0f});
+            m_Planets.push_back(earth);
+
+            auto mercury = Pandora::CreateRef<Pandora::Entity>("SolarSim/assets/Mercury.obj", "SolarSim/assets/Mercury.png");
+            mercury->SetScale(5.0f);
+            mercury->SetPosition({5.0f, -0.5f, 0.0f});
+            m_Planets.push_back(mercury);
+        }
 
         if (m_MouseCaptured) {
             Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
@@ -72,17 +80,21 @@ namespace SolarSim {
 
         m_CameraController.OnUpdate(ts);
 
-        glm::vec3 rotation = m_Entity->GetRotation();
-        // 1 hour = 1 second
-        rotation.y += (360.0f / (24.0f)) * ts;
-        rotation.y = std::fmod(rotation.y, 360.0f);
-        m_Entity->SetRotation(rotation);
+        /*for (auto planet : m_Planets) {
+            glm::vec3 rotation = planet->GetRotation();
+            // 1 hour = 1 second
+            rotation.y += (360.0f / (24.0f)) * ts;
+            rotation.y = std::fmod(rotation.y, 360.0f);
+            planet->SetRotation(rotation);
+        }*/
     }
 
     void SolarSimLayer::OnRender()
     {
         Pandora::Renderer3D::BeginScene(m_CameraController.GetCamera());
-        Pandora::Renderer3D::DrawEntity(m_Entity);
+        for (auto planet : m_Planets) {
+            Pandora::Renderer3D::DrawEntity(planet);
+        }
         Pandora::Renderer3D::EndScene();
     }
 
@@ -91,9 +103,9 @@ namespace SolarSim {
         ImGui::Begin("Properties");
         ImGui::Text("Selected entity: %s", "Earth");
         
-        glm::vec3 rotation = m_Entity->GetRotation();
+        /*glm::vec3 rotation = m_Planets[0]->GetRotation();
         ImGui::SliderFloat3("Rotation", (float*)&rotation, -360.0f, 360.0f);
-        m_Entity->SetRotation(rotation);
+        m_Planets[0]->SetRotation(rotation);*/
 
         ImGui::End();
     }

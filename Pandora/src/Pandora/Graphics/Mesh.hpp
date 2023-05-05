@@ -13,6 +13,8 @@ namespace Pandora {
 
         Ref<VertexArray> GetVAO() const { return m_VAO; }
 
+        void Bind() const;
+
     private:
         Ref<VertexArray> m_VAO;
     };

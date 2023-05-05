@@ -19,8 +19,7 @@ namespace SolarSim {
     private:
         bool OnKeyPressed(Pandora::KeyPressedEvent& e);
     private:
-        Pandora::Ref<Pandora::Entity> m_Entity;
-        Pandora::Ref<Pandora::Texture2D> m_Texture;
+        std::vector<Pandora::Ref<Pandora::Entity>> m_Planets;
 
         Pandora::PerspectiveCameraController m_CameraController;
 
