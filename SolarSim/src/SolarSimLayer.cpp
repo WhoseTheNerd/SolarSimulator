@@ -48,8 +48,8 @@ namespace SolarSim {
         planets_list->for_each([&](auto&& el) {
             const std::string name = el.value_or("");
             
-            const std::string modelpath = std::string("SolarSim/assets/") + planets_file[name]["model"].value_or("");
-            const std::string texturepath = std::string("SolarSim/assets/") + planets_file[name]["texture"].value_or("");
+            const std::string modelpath = std::string("SolarSim/assets/models/") + planets_file[name]["model"].value_or("");
+            const std::string texturepath = std::string("SolarSim/assets/textures/") + planets_file[name]["texture"].value_or("");
 
             const float radius = planets_file[name]["radius"].value_or(1.0f);
             const float scale = radius / planets_file["Earth"]["radius"].value_or(1.0f);
@@ -66,7 +66,19 @@ namespace SolarSim {
         }
 
         Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
-        Pandora::Renderer3D::Init();
+        Pandora::Renderer3D::Init("SolarSim/assets/shaders/basic.shader");
+
+        const std::array<std::string_view, 6> files = {
+            "SolarSim/assets/textures/skybox/right.jpg",
+            "SolarSim/assets/textures/skybox/left.jpg",
+            "SolarSim/assets/textures/skybox/top.jpg",
+            "SolarSim/assets/textures/skybox/bottom.jpg",
+            "SolarSim/assets/textures/skybox/front.jpg",
+            "SolarSim/assets/textures/skybox/back.jpg",
+        };
+
+        Pandora::Scope<Pandora::Skybox> skybox = Pandora::CreateScope<Pandora::Skybox>("SolarSim/assets/shaders/skybox.shader", files);
+        Pandora::Renderer3D::SetSkybox(std::move(skybox));
     }
 
     void SolarSimLayer::OnDetach()

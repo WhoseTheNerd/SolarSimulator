@@ -16,5 +16,7 @@ namespace Pandora {
         virtual void SetPolygonMode(Face face, PolygonMode mode) override;
 
 		virtual void DrawIndexed(const Ref<Mesh>& mesh) override;
+
+        virtual void SetDepthFunction(DepthFunctionMode mode) override;
     };
 }

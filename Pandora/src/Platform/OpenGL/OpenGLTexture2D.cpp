@@ -35,7 +35,7 @@ namespace Pandora {
 
     OpenGLTexture2D::~OpenGLTexture2D()
     {
-        glDeleteTextures(0, &m_TextureHandle);
+        glDeleteTextures(1, &m_TextureHandle);
     }
 
     void OpenGLTexture2D::Bind(uint32_t slot) const

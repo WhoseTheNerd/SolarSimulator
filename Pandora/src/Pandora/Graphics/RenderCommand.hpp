@@ -32,6 +32,11 @@ namespace Pandora {
 		{
 			s_RendererAPI->SetPolygonMode(face, mode);
 		}
+
+		inline static void SetDepthFunction(DepthFunctionMode mode)
+		{
+			s_RendererAPI->SetDepthFunction(mode);
+		}
 	private:
 		static inline Scope<RendererAPI> s_RendererAPI = RendererAPI::Create();
     };

@@ -65,6 +65,20 @@ namespace Pandora {
         m_VAO->SetIndexBuffer(ibo);
     }
 
+
+    void Mesh::InitMesh(size_t vertices_len, const float* vertices, size_t indices_len, const uint32_t* indices, const BufferLayout& layout)
+    {
+        m_VAO = VertexArray::Create();
+
+        Ref<VertexBuffer> vbo = VertexBuffer::Create(vertices, vertices_len * sizeof(float));
+        vbo->SetLayout(layout);
+
+        Ref<IndexBuffer> ibo = IndexBuffer::Create(indices, indices_len);
+
+        m_VAO->AddVertexBuffer(vbo);
+        m_VAO->SetIndexBuffer(ibo);
+    }
+
     void Mesh::Bind() const
     {
         m_VAO->Bind();

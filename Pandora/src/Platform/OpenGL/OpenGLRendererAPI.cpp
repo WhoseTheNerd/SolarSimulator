@@ -68,4 +68,38 @@ namespace Pandora {
 
         glPolygonMode(glface, glmode);
     }
+
+
+    void OpenGLRendererAPI::SetDepthFunction(DepthFunctionMode mode)
+    {
+        switch (mode)
+        {
+        case DepthFunctionMode::Never:
+            glDepthFunc(GL_NEVER);
+            break;
+        case DepthFunctionMode::Less:
+            glDepthFunc(GL_LESS);
+            break;
+        case DepthFunctionMode::Equal:
+            glDepthFunc(GL_EQUAL);
+            break;
+        case DepthFunctionMode::LessEqual:
+            glDepthFunc(GL_LEQUAL);
+            break;
+        case DepthFunctionMode::Greater:
+            glDepthFunc(GL_GREATER);
+            break;
+        case DepthFunctionMode::NotEqual:
+            glDepthFunc(GL_NOTEQUAL);
+            break;
+        case DepthFunctionMode::GreaterEqual:
+            glDepthFunc(GL_GEQUAL);
+            break;
+        case DepthFunctionMode::Always:
+            glDepthFunc(GL_ALWAYS);
+            break;
+        default:
+            throw std::runtime_error("End of unreachable section reached!");
+        }
+    }
 }

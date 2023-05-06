@@ -19,6 +19,14 @@ namespace Pandora {
         Point, Line, Fill
     };
 
+    enum class DepthFunctionMode
+    {
+        Never, Less, Equal, 
+        LessEqual, Greater, 
+        NotEqual, GreaterEqual, 
+        Always
+    };
+
     class RendererAPI
     {
     public:
@@ -31,6 +39,8 @@ namespace Pandora {
 		virtual void DrawIndexed(const Ref<Mesh>& mesh) = 0;
 
         virtual void SetPolygonMode(Face face, PolygonMode mode) = 0;
+
+        virtual void SetDepthFunction(DepthFunctionMode mode) = 0;
 
         static Scope<RendererAPI> Create();
     };
