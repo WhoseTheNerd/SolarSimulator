@@ -1,7 +1,12 @@
 #include "OpenGLTexture3D.hpp"
 
+#include <vector>
+#include <future>
+
 #include <GL/glew.h>
 #include <stb_image.h>
+
+#include "Pandora/Core/Timer.hpp"
 
 namespace Pandora {
 
@@ -12,25 +17,47 @@ namespace Pandora {
 
     OpenGLTexture3D::OpenGLTexture3D(const std::array<std::string_view, 6>& files)
     {
+        Timer timer("OpenGLTexture3D::OpenGLTexture3D(const std::array<std::string_view, 6>&)");
+
         glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_TextureHandle);
 
-        for (size_t i = 0; i < files.size(); ++i)
+        struct RawImageData
         {
-            int width, height, channels;
+            uint8_t* pixels;
+            int width;
+            int height;
+            int channels;
+        };
 
-            stbi_set_flip_vertically_on_load(false); 
-            uint8_t* data = stbi_load(files[i].data(), &width, &height, &channels, 4);
+        std::vector<std::future<RawImageData>> dataFutures;
+        dataFutures.reserve(6);
 
-            if (data)
+        stbi_set_flip_vertically_on_load(false); 
+        for (const auto& file : files) {
+            dataFutures.push_back(std::async(std::launch::async, [](const std::string_view& file){
+                int width, height, channels;
+                uint8_t* data = stbi_load(file.data(), &width, &height, &channels, 4);
+                return RawImageData{data, width, height, channels};
+            }, file));
+        }
+
+        for (const auto& future : dataFutures) {
+            future.wait();
+        }
+
+        for (size_t i = 0; i < dataFutures.size(); ++i) {
+            RawImageData rawImageData = dataFutures[i].get();
+
+            if (rawImageData.pixels)
             {
                 if (i == 0) {
-                    m_Width = width;
-                    m_Height = height;
+                    m_Width = rawImageData.width;
+                    m_Height = rawImageData.height;
                     glTextureStorage2D(m_TextureHandle, 1, GL_RGB8, m_Width, m_Height);
                 }
 
-                glTextureSubImage3D(m_TextureHandle, 0, 0, 0, i, width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE, data);
-                stbi_image_free(data);
+                glTextureSubImage3D(m_TextureHandle, 0, 0, 0, i, rawImageData.width, rawImageData.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, rawImageData.pixels);
+                stbi_image_free(rawImageData.pixels);
             }
             else
             {
