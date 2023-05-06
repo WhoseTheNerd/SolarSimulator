@@ -73,19 +73,21 @@ namespace SolarSim {
             planetsData.emplace_back(modelpath, texturepath, mass, radius, distance);
         });
 
-        struct PureMesh
+        struct PureTexturedMesh
         {
             std::vector<Pandora::Vertex> vertices;
             std::vector<uint32_t> indices;
+            Pandora::Texture2D::ImageData imageData;
         };                    
 
-        std::vector<std::future<PureMesh>> pureMeshesFuture;
+        std::vector<std::future<PureTexturedMesh>> pureMeshesFuture;
 
         for (const auto& planetData : planetsData) {
-            pureMeshesFuture.push_back(std::async(std::launch::async, [](const std::string& modelpath){
+            pureMeshesFuture.push_back(std::async(std::launch::async, [](const std::string& modelpath, const std::string& texturepath){
                 auto [vertices, indices] = Pandora::Mesh::LoadMesh(modelpath.c_str());
-                return PureMesh{vertices, indices};
-            }, planetData.modelPath));
+                auto imageData = Pandora::Texture2D::LoadImage(texturepath.c_str());
+                return PureTexturedMesh{vertices, indices, imageData};
+            }, planetData.modelPath, planetData.texturePath));
         }
 
         for (const auto& future : pureMeshesFuture) {
@@ -96,13 +98,14 @@ namespace SolarSim {
 
         for (size_t i = 0; i < planetsData.size(); ++i) {
             PlanetData planetData = planetsData[i];
-            PureMesh pureMesh = pureMeshesFuture[i].get();
+            PureTexturedMesh pureMesh = pureMeshesFuture[i].get();
 
             const Pandora::Ref<Pandora::Mesh> mesh = Pandora::CreateRef<Pandora::Mesh>(pureMesh.vertices, pureMesh.indices);
+            const Pandora::Ref<Pandora::Texture2D> texture = Pandora::Texture2D::Create(pureMesh.imageData);
 
             const float scale = planetData.radius / planets_file["Earth"]["radius"].value_or(1.0f);
 
-            auto planet = Pandora::CreateRef<Pandora::Entity>(mesh, planetData.texturePath.c_str());
+            auto planet = Pandora::CreateRef<Pandora::Entity>(mesh, texture);
             planet->SetPosition({positional_constant * i, -0.5f, 0.0f});
             planet->SetScale({scale});
             m_Planets.push_back(planet);

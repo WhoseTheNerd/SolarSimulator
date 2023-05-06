@@ -8,6 +8,7 @@ namespace Pandora {
     {
     public:
         OpenGLTexture2D(const char* filepath);
+        OpenGLTexture2D(const ImageData& imageData);
         virtual ~OpenGLTexture2D();
 
         virtual uint32_t GetWidth() const override { return m_Width; }

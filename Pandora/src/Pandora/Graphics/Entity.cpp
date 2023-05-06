@@ -14,6 +14,11 @@ namespace Pandora {
     {
     }
 
+    Entity::Entity(const Ref<Mesh>& mesh, const Ref<Texture2D>& texture)
+        : m_Mesh(mesh), m_Texture(texture), m_Model(1.0f), m_Position(0.0f), m_Scale(1.0f), m_Rotation(0.0f)
+    {
+    }
+
     void Entity::CalculateModelMatrix()
     {
         m_Model = glm::identity<glm::mat4>();

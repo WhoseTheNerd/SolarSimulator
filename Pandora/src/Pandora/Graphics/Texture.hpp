@@ -19,7 +19,18 @@ namespace Pandora {
     class Texture2D : public Texture
     {
     public:
+        struct ImageData
+        {
+            uint8_t* pixels;
+            int width;
+            int height;
+            int channels;
+        };
+    public:
+        static ImageData LoadImage(const char* filepath);
+
         static Scope<Texture2D> Create(const char* filepath);
+        static Scope<Texture2D> Create(const ImageData& imageData);
     };
 
     class Texture3D : public Texture

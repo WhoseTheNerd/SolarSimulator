@@ -14,6 +14,7 @@ namespace Pandora {
     public:
         Entity(const char* filepath, const char* texturepath);
         Entity(const Ref<Mesh>& mesh, const char* texturepath);
+        Entity(const Ref<Mesh>& mesh, const Ref<Texture2D>& texture);
 
         const glm::mat4& GetModelMatrix() const { return m_Model; }
 
