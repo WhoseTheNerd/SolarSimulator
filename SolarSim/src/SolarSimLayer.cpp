@@ -1,6 +1,8 @@
 #include "SolarSimLayer.hpp"
 
 #include <unordered_map>
+#include <iostream>
+#include <future>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -11,7 +13,6 @@
 #include <glm/gtx/string_cast.hpp>
 
 #include <toml.hpp>
-#include <iostream>
 
 namespace SolarSim {
 
@@ -26,6 +27,8 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
+        Pandora::Timer timer("SolarSimLayer::OnAttach()");
+
         toml::table planets_file = toml::parse_file("SolarSim/assets/planets.toml");
         auto planets_list = planets_file["planets"]["names"].as_array();
 
@@ -44,22 +47,66 @@ namespace SolarSim {
         m_CameraController.SetCameraYaw(camera_yaw);
         m_CameraController.SetCameraPosition(glm::vec3{camera_pos_x, camera_pos_y, camera_pos_z});
 
-        int i = 0;
+        struct PlanetData
+        {
+            std::string modelPath;
+            std::string texturePath;
+            float mass;
+            float radius;
+            float distance;
+
+            PlanetData(const std::string& modelPath, const std::string& texturePath, float mass, float radius, float distance)
+                : modelPath(modelPath), texturePath(texturePath), mass(mass), radius(radius), distance(distance)
+            {}
+        };
+
+        std::vector<PlanetData> planetsData;
+        planetsData.reserve(planets_list->size());
+
         planets_list->for_each([&](auto&& el) {
             const std::string name = el.value_or("");
-            
             const std::string modelpath = std::string("SolarSim/assets/models/") + planets_file[name]["model"].value_or("");
             const std::string texturepath = std::string("SolarSim/assets/textures/") + planets_file[name]["texture"].value_or("");
+            const float mass = planets_file[name]["mass"].value_or(-1.0f);
+            const float radius = planets_file[name]["radius"].value_or(-1.0f);
+            const float distance = planets_file[name]["distance"].value_or(-1.0f);
+            planetsData.emplace_back(modelpath, texturepath, mass, radius, distance);
+        });
 
-            const float radius = planets_file[name]["radius"].value_or(1.0f);
-            const float scale = radius / planets_file["Earth"]["radius"].value_or(1.0f);
+        struct PureMesh
+        {
+            std::vector<Pandora::Vertex> vertices;
+            std::vector<uint32_t> indices;
+        };                    
 
-            auto planet = Pandora::CreateRef<Pandora::Entity>(modelpath.c_str(), texturepath.c_str());
+        std::vector<std::future<PureMesh>> pureMeshesFuture;
+
+        for (const auto& planetData : planetsData) {
+            pureMeshesFuture.push_back(std::async(std::launch::async, [](const std::string& modelpath){
+                auto [vertices, indices] = Pandora::Mesh::LoadMesh(modelpath.c_str());
+                return PureMesh{vertices, indices};
+            }, planetData.modelPath));
+        }
+
+        for (const auto& future : pureMeshesFuture) {
+            future.wait();
+        }
+
+        PD_ASSERT(pureMeshesFuture.size() == planetsData.size(), "Something wrong going around here.");
+
+        for (size_t i = 0; i < planetsData.size(); ++i) {
+            PlanetData planetData = planetsData[i];
+            PureMesh pureMesh = pureMeshesFuture[i].get();
+
+            const Pandora::Ref<Pandora::Mesh> mesh = Pandora::CreateRef<Pandora::Mesh>(pureMesh.vertices, pureMesh.indices);
+
+            const float scale = planetData.radius / planets_file["Earth"]["radius"].value_or(1.0f);
+
+            auto planet = Pandora::CreateRef<Pandora::Entity>(mesh, planetData.texturePath.c_str());
             planet->SetPosition({positional_constant * i, -0.5f, 0.0f});
             planet->SetScale({scale});
             m_Planets.push_back(planet);
-            i++;
-        });
+        }
 
         if (m_MouseCaptured) {
             Pandora::Input::SetInputMode(Pandora::InputMode::Capture);

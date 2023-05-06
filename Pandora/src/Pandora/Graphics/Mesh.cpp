@@ -9,6 +9,53 @@ namespace Pandora {
 
     Mesh::Mesh(const char* filepath)
     {
+        const auto [vertices, indices] = LoadMesh(filepath);
+
+        m_VAO = VertexArray::Create();
+
+        Ref<VertexBuffer> vbo = VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
+        vbo->SetLayout(Vertex::GetBufferLayout());
+
+        Ref<IndexBuffer> ibo = IndexBuffer::Create(indices);
+
+        m_VAO->AddVertexBuffer(vbo);
+        m_VAO->SetIndexBuffer(ibo);
+    }
+
+
+    Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices)
+    {
+        m_VAO = VertexArray::Create();
+
+        Ref<VertexBuffer> vbo = VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
+        vbo->SetLayout(Vertex::GetBufferLayout());
+
+        Ref<IndexBuffer> ibo = IndexBuffer::Create(indices);
+
+        m_VAO->AddVertexBuffer(vbo);
+        m_VAO->SetIndexBuffer(ibo);
+    }
+
+    void Mesh::InitMesh(size_t vertices_len, const float* vertices, size_t indices_len, const uint32_t* indices, const BufferLayout& layout)
+    {
+        m_VAO = VertexArray::Create();
+
+        Ref<VertexBuffer> vbo = VertexBuffer::Create(vertices, vertices_len * sizeof(float));
+        vbo->SetLayout(layout);
+
+        Ref<IndexBuffer> ibo = IndexBuffer::Create(indices, indices_len);
+
+        m_VAO->AddVertexBuffer(vbo);
+        m_VAO->SetIndexBuffer(ibo);
+    }
+
+    void Mesh::Bind() const
+    {
+        m_VAO->Bind();
+    }
+
+    std::pair<std::vector<Vertex>, std::vector<uint32_t>> Mesh::LoadMesh(const char* filepath)
+    {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
@@ -54,33 +101,6 @@ namespace Pandora {
             }
         }
 
-        m_VAO = VertexArray::Create();
-
-        Ref<VertexBuffer> vbo = VertexBuffer::Create((const float*)vertices.data(), vertices.size() * sizeof(Vertex));
-        vbo->SetLayout(Vertex::GetBufferLayout());
-
-        Ref<IndexBuffer> ibo = IndexBuffer::Create(indices);
-
-        m_VAO->AddVertexBuffer(vbo);
-        m_VAO->SetIndexBuffer(ibo);
-    }
-
-
-    void Mesh::InitMesh(size_t vertices_len, const float* vertices, size_t indices_len, const uint32_t* indices, const BufferLayout& layout)
-    {
-        m_VAO = VertexArray::Create();
-
-        Ref<VertexBuffer> vbo = VertexBuffer::Create(vertices, vertices_len * sizeof(float));
-        vbo->SetLayout(layout);
-
-        Ref<IndexBuffer> ibo = IndexBuffer::Create(indices, indices_len);
-
-        m_VAO->AddVertexBuffer(vbo);
-        m_VAO->SetIndexBuffer(ibo);
-    }
-
-    void Mesh::Bind() const
-    {
-        m_VAO->Bind();
+        return std::make_pair(vertices, indices);
     }
 }

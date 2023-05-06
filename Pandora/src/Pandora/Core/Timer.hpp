@@ -17,7 +17,7 @@ namespace Pandora {
         ~Timer()
         {
             auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::seconds>(end - m_Start).count();
+            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - m_Start).count() / 1000.0f;
             PD_CORE_INFO("{} took {} s", m_Name, duration);
         }
     private:
