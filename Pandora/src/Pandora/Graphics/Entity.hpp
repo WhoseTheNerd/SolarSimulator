@@ -6,6 +6,8 @@
 #include "Pandora/Graphics/Texture.hpp"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
 
 namespace Pandora {
 
@@ -25,8 +27,8 @@ namespace Pandora {
         void SetPosition(const glm::vec3& position) { m_Position = position; CalculateModelMatrix(); }
         const glm::vec3& GetPosition() const { return m_Position; }
 
-        void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; CalculateModelMatrix(); }
-        const glm::vec3& GetRotation() const { return m_Rotation; }
+        void AddRotation(float angle, const glm::vec3& axis) { m_Rotation = glm::angleAxis(glm::radians(angle), axis) * m_Rotation; CalculateModelMatrix(); }
+        const glm::quat& GetRotation() const { return m_Rotation; }
 
         const Ref<Mesh>& GetMesh() const { return m_Mesh; }
         const Ref<Texture2D>& GetTexture() const { return m_Texture; }
@@ -41,6 +43,6 @@ namespace Pandora {
 
         glm::vec3 m_Position;
         glm::vec3 m_Scale;
-        glm::vec3 m_Rotation;
+        glm::quat m_Rotation;
     };
 }

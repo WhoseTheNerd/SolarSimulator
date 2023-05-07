@@ -41,12 +41,21 @@ namespace SolarSim {
             return glm::dvec2{force_x, force_y};
         };
 
+        #if 1
+        glm::dvec2 total_force{};
+        for (const auto& planet : planets) {
+            if (*planet != *this) {
+                total_force += CalculateAttraction(*planet, *this);
+            }
+        }
+        #else
         const glm::dvec2 total_force = std::accumulate(std::begin(planets), std::end(planets), glm::dvec2{0.0}, [&](auto&& total, const auto& planet){
             if (*planet != *this) {
                 return total + CalculateAttraction(*planet, *this);
             }
             return total;
         });
+        #endif
 
         m_Velocity.x += total_force.x / m_Mass * TIMESTEP * ts;
         m_Velocity.y += total_force.y / m_Mass * TIMESTEP * ts;

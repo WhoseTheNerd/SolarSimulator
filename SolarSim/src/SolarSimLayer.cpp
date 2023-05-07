@@ -167,13 +167,9 @@ namespace SolarSim {
 
         m_CameraController.OnUpdate(ts);
 
-        /*for (auto planet : m_Planets) {
-            glm::vec3 rotation = planet->GetRotation();
-            // 1 hour = 1 second
-            rotation.y += (360.0f / (24.0f)) * ts;
-            rotation.y = std::fmod(rotation.y, 360.0f);
-            planet->SetRotation(rotation);
-        }*/
+        for (auto planet : m_Planets) {
+            planet->AddRotation((360.0f / 24.0f * ts), glm::vec3{0, 1, 0});
+        }
     }
 
     void SolarSimLayer::OnRender()
