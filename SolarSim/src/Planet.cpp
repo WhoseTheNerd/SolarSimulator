@@ -11,7 +11,7 @@ namespace SolarSim {
         : m_Name(name), Pandora::Entity(mesh, texture), m_Mass(mass), m_Radius(radius), m_Velocity(glm::dvec2{0.0, orbit_velocity}), m_AstroPos(glm::dvec2{distance, 0.0})
     {
         m_Position = glm::vec3{m_AstroPos.x * SCALE, 0.0f, m_AstroPos.y * SCALE};
-        m_Scale = glm::vec3{radius / 100'000.0f};
+        m_Scale = glm::vec3{static_cast<float>(radius) / 100'000.0f};
         CalculateModelMatrix();
     }
 
@@ -27,42 +27,35 @@ namespace SolarSim {
 
     void Planet::OnUpdate(Pandora::Timestep ts, const std::vector<Pandora::Ref<Planet>>& planets)
     {
-        double total_fx = 0.0f;
-        double total_fy = 0.0f;
+        auto CalculateAttraction = [](const Planet& left, const Planet& right) -> glm::dvec2 {
+            const glm::dvec2 diff = left.m_AstroPos - right.m_AstroPos;
+            const double distance_squared = glm::dot(diff, diff);
 
-        for (const auto& planet : planets) {
+            const double force = G * right.m_Mass * left.m_Mass / distance_squared;
+            const double theta = std::atan2(diff.y, diff.x);
+            const double force_x = std::cos(theta) * force;
+            const double force_y = std::sin(theta) * force;
+
+            PD_ASSERT(!(std::isnan(distance_squared) || std::isnan(force) || std::isinf(distance_squared) || std::isinf(force)), "Distance or force cannot be NaN or Inf!");
+
+            return glm::dvec2{force_x, force_y};
+        };
+
+        const glm::dvec2 total_force = std::accumulate(std::begin(planets), std::end(planets), glm::dvec2{0.0}, [&](auto&& total, const auto& planet){
             if (*planet != *this) {
-                const glm::dvec2 diff = planet->m_AstroPos - this->m_AstroPos;
-                const double distance_x = diff.x;
-                const double distance_y = diff.y;
-
-                const double distance = std::sqrt(distance_x*distance_x + distance_y*distance_y);
-                const double distance_squared = distance * distance;
-
-                const double planet_mass = planet->m_Mass;
-                const double current_mass = m_Mass;
-                const double force = G * current_mass * planet_mass / distance_squared;
-                const double theta = std::atan2(distance_y, distance_x);
-                const double force_x = std::cos(theta) * force;
-                const double force_y = std::sin(theta) * force;
-
-                if (std::isnan(distance) || std::isnan(force) || std::isinf(distance) || std::isinf(force)) {
-                    PD_DEBUGBREAK();
-                }
-
-                total_fx += force_x;
-                total_fy += force_y;
+                return total + CalculateAttraction(*planet, *this);
             }
-        }
+            return total;
+        });
 
-
-        m_Velocity.x += total_fx / m_Mass * TIMESTEP * ts;
-        m_Velocity.y += total_fy / m_Mass * TIMESTEP * ts;
+        m_Velocity.x += total_force.x / m_Mass * TIMESTEP * ts;
+        m_Velocity.y += total_force.y / m_Mass * TIMESTEP * ts;
 
         m_AstroPos.x += m_Velocity.x * TIMESTEP * ts;
         m_AstroPos.y += m_Velocity.y * TIMESTEP * ts;
         
-        m_Position = glm::vec3{m_AstroPos.x * SCALE, 0.0f, m_AstroPos.y * SCALE};
+        m_Position.x = m_AstroPos.x * SCALE; 
+        m_Position.z = m_AstroPos.y * SCALE;
         CalculateModelMatrix();
     }
 }
