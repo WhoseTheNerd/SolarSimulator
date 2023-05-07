@@ -5,9 +5,9 @@
 namespace SolarSim {
 
     constexpr float G = 6.67430e-11;
-    constexpr float TIMESTEP = 3600.0f * 24.0f;
+    constexpr float TIMESTEP = 3600.0f;
     constexpr float AU = 149.6e9;
-    constexpr float SCALE = 200.0f / AU;
+    constexpr float SCALE = 2'000.0f / AU;
 
     Planet::Planet(const std::string& name, const Pandora::Ref<Pandora::Mesh>& mesh, const Pandora::Ref<Pandora::Texture2D>& texture, double mass, double radius, double distance, double orbit_velocity)
         : m_Name(name), Pandora::Entity(mesh, texture), m_Mass(mass), m_Radius(radius), m_Velocity(glm::dvec2{0.0, orbit_velocity}), m_AstroPos(glm::dvec2{distance, 0.0})
@@ -20,11 +20,11 @@ namespace SolarSim {
         /*m_AstroPos.x *= std::cos(angle);
         m_AstroPos.y *= std::sin(angle);*/
 
-        m_Velocity.x = -orbit_velocity * std::sin(angle);
-        m_Velocity.y = orbit_velocity * std::cos(angle);
+        /*m_Velocity.x = -orbit_velocity * std::sin(angle);
+        m_Velocity.y = orbit_velocity * std::cos(angle);*/
 
         m_Position = glm::vec3{m_AstroPos.x * SCALE, 0.0f, m_AstroPos.y * SCALE};
-        m_Scale = glm::vec3{radius / 1000.0f};
+        m_Scale = glm::vec3{radius * SCALE * 1000.0f};
         CalculateModelMatrix();
 
         PD_TRACE("Planet {}", name);
@@ -49,7 +49,7 @@ namespace SolarSim {
 
         for (const auto& planet : planets) {
             if (*planet != *this) {
-                const glm::dvec2 diff = this->m_AstroPos - planet->m_AstroPos;
+                const glm::dvec2 diff = planet->m_AstroPos - this->m_AstroPos;
                 const double distance_x = diff.x;
                 const double distance_y = diff.y;
 
