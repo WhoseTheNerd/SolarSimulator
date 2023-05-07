@@ -12,6 +12,7 @@
 #include "Pandora/Core/ColorUtil.hpp"
 #include "Pandora/Core/Platform.hpp"
 #include "Pandora/Core/Timer.hpp"
+#include "Pandora/Core/Random.hpp"
 
 #include "Pandora/Events/Event.hpp"
 #include "Pandora/Events/ApplicationEvent.hpp"

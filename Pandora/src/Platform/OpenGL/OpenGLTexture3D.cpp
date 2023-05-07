@@ -6,8 +6,6 @@
 #include <GL/glew.h>
 #include <stb_image.h>
 
-#include "Pandora/Core/Timer.hpp"
-
 namespace Pandora {
 
     Scope<Texture3D> Texture3D::Create(const std::array<std::string_view, 6>& files)
@@ -17,8 +15,6 @@ namespace Pandora {
 
     OpenGLTexture3D::OpenGLTexture3D(const std::array<std::string_view, 6>& files)
     {
-        Timer timer("OpenGLTexture3D::OpenGLTexture3D(const std::array<std::string_view, 6>&)");
-
         glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_TextureHandle);
 
         struct RawImageData

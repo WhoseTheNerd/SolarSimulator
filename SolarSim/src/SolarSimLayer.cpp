@@ -27,8 +27,6 @@ namespace SolarSim {
 
     void SolarSimLayer::OnAttach()
     {
-        Pandora::Timer timer("SolarSimLayer::OnAttach()");
-
         toml::table planets_file = toml::parse_file("SolarSim/assets/planets.toml");
         auto planets_list = planets_file["planets"]["names"].as_array();
 

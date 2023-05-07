@@ -1,7 +1,5 @@
 #include "Planet.hpp"
 
-#include <random>
-
 namespace SolarSim {
 
     constexpr float G = 6.67430e-11;
@@ -12,24 +10,9 @@ namespace SolarSim {
     Planet::Planet(const std::string& name, const Pandora::Ref<Pandora::Mesh>& mesh, const Pandora::Ref<Pandora::Texture2D>& texture, double mass, double radius, double distance, double orbit_velocity)
         : m_Name(name), Pandora::Entity(mesh, texture), m_Mass(mass), m_Radius(radius), m_Velocity(glm::dvec2{0.0, orbit_velocity}), m_AstroPos(glm::dvec2{distance, 0.0})
     {
-        static std::random_device rd;
-        static std::mt19937 gen(rd());
-        static std::uniform_real_distribution<double> dist(0.0, 2.0*3.14);
-
-        const double angle = dist(gen);
-        /*m_AstroPos.x *= std::cos(angle);
-        m_AstroPos.y *= std::sin(angle);*/
-
-        /*m_Velocity.x = -orbit_velocity * std::sin(angle);
-        m_Velocity.y = orbit_velocity * std::cos(angle);*/
-
         m_Position = glm::vec3{m_AstroPos.x * SCALE, 0.0f, m_AstroPos.y * SCALE};
         m_Scale = glm::vec3{radius / 100'000.0f};
         CalculateModelMatrix();
-
-        PD_TRACE("Planet {}", name);
-        PD_TRACE("X: {}; Y: {}", m_AstroPos.x, m_AstroPos.y);
-        PD_TRACE("VelX: {}; VelY: {}", m_Velocity.x, m_Velocity.y);
     }
 
     bool Planet::operator==(const Planet& other) const
