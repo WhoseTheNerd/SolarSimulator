@@ -42,6 +42,8 @@ namespace Pandora {
 
         virtual void SetDepthFunction(DepthFunctionMode mode) = 0;
 
+        virtual void Viewport(int width, int height) = 0;
+
         static Scope<RendererAPI> Create();
     };
 }

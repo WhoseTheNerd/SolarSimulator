@@ -163,7 +163,7 @@ namespace SolarSim {
         for (auto& planet : m_Planets) {
             planet->OnUpdate(ts, m_Planets);
             if (planet->GetName() == "Mercury") {
-                m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{100.0f, 100.0f, 100.0f});
+                m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{100.0f, 100.0f, -100.0f});
             }
         }
 
@@ -214,6 +214,7 @@ namespace SolarSim {
 
         Pandora::EventDispatcher dispatcher(event);
         dispatcher.Dispatch<Pandora::KeyPressedEvent>(PD_BIND_EVENT_FN(SolarSimLayer::OnKeyPressed));
+        dispatcher.Dispatch<Pandora::WindowResizeEvent>(PD_BIND_EVENT_FN(SolarSimLayer::OnWindowResize));
     }
 
     bool SolarSimLayer::OnKeyPressed(Pandora::KeyPressedEvent& e)
@@ -244,6 +245,13 @@ namespace SolarSim {
         default: break;
         }
 
+        return false;
+    }
+
+
+    bool SolarSimLayer::OnWindowResize(Pandora::WindowResizeEvent& e)
+    {
+        Pandora::RenderCommand::Viewport(e.GetWidth(), e.GetHeight());
         return false;
     }
 

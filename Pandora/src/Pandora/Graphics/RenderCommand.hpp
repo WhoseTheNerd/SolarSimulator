@@ -37,6 +37,11 @@ namespace Pandora {
 		{
 			s_RendererAPI->SetDepthFunction(mode);
 		}
+
+		inline static void Viewport(int width, int height)
+		{
+			s_RendererAPI->Viewport(width, height);
+		}
 	private:
 		static inline Scope<RendererAPI> s_RendererAPI = RendererAPI::Create();
     };

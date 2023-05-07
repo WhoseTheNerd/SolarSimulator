@@ -102,4 +102,9 @@ namespace Pandora {
             throw std::runtime_error("End of unreachable section reached!");
         }
     }
+
+    void OpenGLRendererAPI::Viewport(int width, int height)
+    {
+        glViewport(0, 0, width, height);
+    }
 }

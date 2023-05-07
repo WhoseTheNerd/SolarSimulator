@@ -20,6 +20,7 @@ namespace SolarSim {
         virtual void OnImGuiRender() override;
     private:
         bool OnKeyPressed(Pandora::KeyPressedEvent& e);
+        bool OnWindowResize(Pandora::WindowResizeEvent& e);
     private:
         std::vector<Pandora::Ref<Planet>> m_Planets;
 

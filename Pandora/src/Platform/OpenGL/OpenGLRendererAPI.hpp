@@ -18,5 +18,6 @@ namespace Pandora {
 		virtual void DrawIndexed(const Ref<Mesh>& mesh) override;
 
         virtual void SetDepthFunction(DepthFunctionMode mode) override;
+        virtual void Viewport(int width, int height) override;
     };
 }
