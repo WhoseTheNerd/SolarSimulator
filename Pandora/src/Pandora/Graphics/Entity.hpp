@@ -31,9 +31,9 @@ namespace Pandora {
         const Ref<Mesh>& GetMesh() const { return m_Mesh; }
         const Ref<Texture2D>& GetTexture() const { return m_Texture; }
 
-    private:
+    protected:
         void CalculateModelMatrix();
-    private:
+    protected:
         Ref<Mesh> m_Mesh;
         Ref<Texture2D> m_Texture;
         

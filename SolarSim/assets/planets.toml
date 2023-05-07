@@ -3,7 +3,7 @@ names = ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranu
 positional_constant = 200.0
 
 [camera]
-speed = 150.0
+speed = 150000.0
 yaw = -26.55
 pitch = -20.79
 position = [552.35, 37.05, 50.06]
@@ -12,6 +12,7 @@ position = [552.35, 37.05, 50.06]
 mass = 1.989e30
 radius = 696340e3
 distance = 0
+orbit_velocity = 0.0
 model = "sphere.obj"
 texture = "Sun.png"
 
@@ -19,6 +20,7 @@ texture = "Sun.png"
 mass = 3.285e23
 radius = 2439.7e3
 distance = 58e9
+orbit_velocity = 47.36e3
 model = "Mercury.obj"
 texture = "Mercury.png"
 
@@ -26,6 +28,7 @@ texture = "Mercury.png"
 mass = 4.867e24
 radius = 6051.8e3
 distance = 107.58e9
+orbit_velocity = 35.02e3
 model = "Venus.obj"
 texture = "Venus.png"
 
@@ -33,6 +36,7 @@ texture = "Venus.png"
 mass = 5.972e24
 radius = 6371e3
 distance = 150.88e9
+orbit_velocity = 29.78e3
 model = "earth.obj"
 texture = "earth.jpg"
 
@@ -40,6 +44,7 @@ texture = "earth.jpg"
 mass = 6.39e23
 radius = 3389.5e3
 distance = 267.73e9
+orbit_velocity = 24.08e3
 model = "Mars.obj"
 texture = "Mars.png"
 
@@ -47,6 +52,7 @@ texture = "Mars.png"
 mass = 1.898e27
 radius = 69911e3
 distance = 741.1e9
+orbit_velocity = 13.06e3
 model = "sphere.obj"
 texture = "Jupiter.png"
 
@@ -54,6 +60,7 @@ texture = "Jupiter.png"
 mass = 5.683e26
 radius = 58232e3
 distance = 1.4648e12
+orbit_velocity = 9.67e3
 model = "sphere.obj"
 texture = "Saturn.png"
 
@@ -61,6 +68,7 @@ texture = "Saturn.png"
 mass = 8.681e25
 radius = 25362e3
 distance = 2.9387e12
+orbit_velocity = 6.79e3
 model = "sphere.obj"
 texture = "Uranus.png"
 
@@ -68,6 +76,7 @@ texture = "Uranus.png"
 mass = 1.024e26
 radius = 24622e3
 distance = 4.4732e12
+orbit_velocity = 5.45e3
 model = "sphere.obj"
 texture = "Neptune.png"
 
@@ -75,5 +84,6 @@ texture = "Neptune.png"
 mass = 1.30900e22
 radius = 1188.3e3
 distance = 5.9e12
+orbit_velocity = 4.64e3
 model = "sphere.obj"
 texture = "Pluto.png"

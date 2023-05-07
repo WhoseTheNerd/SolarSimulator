@@ -2,6 +2,8 @@
 
 #include <Pandora.hpp>
 
+#include "Planet.hpp"
+
 namespace SolarSim {
 
     class SolarSimLayer : public Pandora::Layer
@@ -19,7 +21,7 @@ namespace SolarSim {
     private:
         bool OnKeyPressed(Pandora::KeyPressedEvent& e);
     private:
-        std::vector<Pandora::Ref<Pandora::Entity>> m_Planets;
+        std::vector<Pandora::Ref<Planet>> m_Planets;
 
         Pandora::PerspectiveCameraController m_CameraController;
 

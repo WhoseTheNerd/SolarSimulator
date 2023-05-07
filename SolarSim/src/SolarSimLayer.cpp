@@ -49,14 +49,16 @@ namespace SolarSim {
 
         struct PlanetData
         {
+            std::string name;
             std::string modelPath;
             std::string texturePath;
-            float mass;
-            float radius;
-            float distance;
+            double mass;
+            double radius;
+            double distance;
+            double orbit_velocity;
 
-            PlanetData(const std::string& modelPath, const std::string& texturePath, float mass, float radius, float distance)
-                : modelPath(modelPath), texturePath(texturePath), mass(mass), radius(radius), distance(distance)
+            PlanetData(const std::string& name, const std::string& modelPath, const std::string& texturePath, double mass, double radius, double distance, double orbit_velocity)
+                : name(name), modelPath(modelPath), texturePath(texturePath), mass(mass), radius(radius), distance(distance), orbit_velocity(orbit_velocity)
             {}
         };
 
@@ -67,10 +69,11 @@ namespace SolarSim {
             const std::string name = el.value_or("");
             const std::string modelpath = std::string("SolarSim/assets/models/") + planets_file[name]["model"].value_or("");
             const std::string texturepath = std::string("SolarSim/assets/textures/") + planets_file[name]["texture"].value_or("");
-            const float mass = planets_file[name]["mass"].value_or(-1.0f);
-            const float radius = planets_file[name]["radius"].value_or(-1.0f);
-            const float distance = planets_file[name]["distance"].value_or(-1.0f);
-            planetsData.emplace_back(modelpath, texturepath, mass, radius, distance);
+            const double mass = planets_file[name]["mass"].value_or(-1.0);
+            const double radius = planets_file[name]["radius"].value_or(-1.0);
+            const double distance = planets_file[name]["distance"].value_or(-1.0);
+            const double orbit_velocity = planets_file[name]["orbit_velocity"].value_or(0.0);
+            planetsData.emplace_back(name, modelpath, texturepath, mass, radius, distance, orbit_velocity);
         });
 
         struct PureTexturedMesh
@@ -103,11 +106,7 @@ namespace SolarSim {
             const Pandora::Ref<Pandora::Mesh> mesh = Pandora::CreateRef<Pandora::Mesh>(pureMesh.vertices, pureMesh.indices);
             const Pandora::Ref<Pandora::Texture2D> texture = Pandora::Texture2D::Create(pureMesh.imageData);
 
-            const float scale = planetData.radius / planets_file["Earth"]["radius"].value_or(1.0f);
-
-            auto planet = Pandora::CreateRef<Pandora::Entity>(mesh, texture);
-            planet->SetPosition({positional_constant * i, -0.5f, 0.0f});
-            planet->SetScale({scale});
+            auto planet = Pandora::CreateRef<Planet>(planetData.name, mesh, texture, planetData.mass, planetData.radius, planetData.distance, planetData.orbit_velocity);
             m_Planets.push_back(planet);
         }
 
@@ -162,6 +161,10 @@ namespace SolarSim {
         }
 
         m_CameraController.OnUpdate(ts);
+
+        for (auto& planet : m_Planets) {
+            planet->OnUpdate(m_Planets);
+        }
 
         /*for (auto planet : m_Planets) {
             glm::vec3 rotation = planet->GetRotation();
