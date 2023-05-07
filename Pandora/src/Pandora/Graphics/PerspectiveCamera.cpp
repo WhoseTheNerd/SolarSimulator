@@ -5,7 +5,7 @@
 namespace Pandora {
 
     PerspectiveCamera::PerspectiveCamera(float fov, float aspectRatio)
-        : m_ProjectionMatrix(glm::perspective(glm::radians(fov), aspectRatio, 10.0f, 10000000.0f)), m_ViewMatrix(1.0f)
+        : m_ProjectionMatrix(glm::perspective(glm::radians(fov), aspectRatio, 0.1f, 100'000.0f)), m_ViewMatrix(1.0f)
     {
         RecalculateViewMatrix();
     }

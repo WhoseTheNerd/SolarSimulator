@@ -160,11 +160,14 @@ namespace SolarSim {
             startTime = endTime;
         }
 
-        m_CameraController.OnUpdate(ts);
-
         for (auto& planet : m_Planets) {
-            planet->OnUpdate(m_Planets);
+            planet->OnUpdate(ts, m_Planets);
+            if (planet->GetName() == "Mercury") {
+                m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{100.0f, 100.0f, 100.0f});
+            }
         }
+
+        m_CameraController.OnUpdate(ts);
 
         /*for (auto planet : m_Planets) {
             glm::vec3 rotation = planet->GetRotation();
@@ -195,6 +198,10 @@ namespace SolarSim {
         float camera_speed = m_CameraController.GetTranslationSpeed();
         ImGui::SliderFloat("Camera speed", &camera_speed, 80.0f, 500.0f);
         m_CameraController.SetTranslationSpeed(camera_speed);
+
+        for (auto& planet : m_Planets) {
+            ImGui::Text("%s position: {x: %.2f; y: %.2f; z: %.2f}", planet->GetName().c_str(), planet->GetPosition().x, planet->GetPosition().y, planet->GetPosition().z);
+        }
 
         ImGui::End();
     }

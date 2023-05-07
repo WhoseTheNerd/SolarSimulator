@@ -12,7 +12,9 @@ namespace SolarSim {
         bool operator==(const Planet& other) const;
         bool operator!=(const Planet& other) const;
 
-        void OnUpdate(const std::vector<Pandora::Ref<Planet>>& planets);
+        void OnUpdate(Pandora::Timestep ts, const std::vector<Pandora::Ref<Planet>>& planets);
+
+        const std::string& GetName() const { return m_Name; }
     private:
         std::string m_Name;
         double m_Mass;

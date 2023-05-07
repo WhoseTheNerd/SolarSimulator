@@ -3,7 +3,7 @@ names = ["Sun", "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranu
 positional_constant = 200.0
 
 [camera]
-speed = 150000.0
+speed = 15000.0
 yaw = -26.55
 pitch = -20.79
 position = [552.35, 37.05, 50.06]
