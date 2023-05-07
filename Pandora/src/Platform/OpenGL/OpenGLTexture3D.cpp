@@ -8,12 +8,12 @@
 
 namespace Pandora {
 
-    Scope<Texture3D> Texture3D::Create(const std::array<std::string_view, 6>& files)
+    Scope<Texture3D> Texture3D::Create(const std::array<std::string, 6>& files)
     {
         return CreateScope<OpenGLTexture3D>(files);
     }
 
-    OpenGLTexture3D::OpenGLTexture3D(const std::array<std::string_view, 6>& files)
+    OpenGLTexture3D::OpenGLTexture3D(const std::array<std::string, 6>& files)
     {
         glCreateTextures(GL_TEXTURE_CUBE_MAP, 1, &m_TextureHandle);
 
@@ -30,9 +30,9 @@ namespace Pandora {
 
         stbi_set_flip_vertically_on_load(false); 
         for (const auto& file : files) {
-            dataFutures.push_back(std::async(std::launch::async, [](const std::string_view& file){
+            dataFutures.push_back(std::async(std::launch::async, [](const std::string& file) {
                 int width, height, channels;
-                uint8_t* data = stbi_load(file.data(), &width, &height, &channels, 4);
+                uint8_t* data = stbi_load(file.c_str(), &width, &height, &channels, 4);
                 return RawImageData{data, width, height, channels};
             }, file));
         }
@@ -51,7 +51,6 @@ namespace Pandora {
                     m_Height = rawImageData.height;
                     glTextureStorage2D(m_TextureHandle, 1, GL_RGB8, m_Width, m_Height);
                 }
-
                 glTextureSubImage3D(m_TextureHandle, 0, 0, 0, i, rawImageData.width, rawImageData.height, 1, GL_RGBA, GL_UNSIGNED_BYTE, rawImageData.pixels);
                 stbi_image_free(rawImageData.pixels);
             }

@@ -27,4 +27,16 @@ namespace Pandora {
         m_Model *= glm::toMat4(m_Rotation);
         m_Model = glm::scale(m_Model, m_Scale);
     }
+
+    void Entity::AddRotation(const glm::vec3& eulerAngle)
+    {
+        m_Rotation = glm::quat(glm::radians(eulerAngle)) * m_Rotation; 
+        CalculateModelMatrix(); 
+    }
+
+    void Entity::AddRotation(float angle, const glm::vec3& axis)
+    { 
+        m_Rotation = glm::angleAxis(glm::radians(angle), axis) * m_Rotation; 
+        CalculateModelMatrix(); 
+    }
 }

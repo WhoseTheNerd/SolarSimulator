@@ -7,11 +7,12 @@ namespace SolarSim {
     constexpr float AU = 149.6e9;
     constexpr float SCALE = 20'000.0f / AU;
 
-    Planet::Planet(const std::string& name, const Pandora::Ref<Pandora::Mesh>& mesh, const Pandora::Ref<Pandora::Texture2D>& texture, double mass, double radius, double distance, double orbit_velocity)
-        : m_Name(name), Pandora::Entity(mesh, texture), m_Mass(mass), m_Radius(radius), m_Velocity(glm::dvec2{0.0, orbit_velocity}), m_AstroPos(glm::dvec2{distance, 0.0})
+    Planet::Planet(const std::string& name, const Pandora::Ref<Pandora::Mesh>& mesh, const Pandora::Ref<Pandora::Texture2D>& texture, double mass, double radius, double distance, double orbit_velocity, double rotationRate, const glm::vec3& axis)
+        : m_Name(name), Pandora::Entity(mesh, texture), m_Mass(mass), m_Radius(radius), m_Velocity(glm::dvec2{0.0, orbit_velocity}), m_AstroPos(glm::dvec2{distance, 0.0}), m_RotationRate(rotationRate), m_Axis(axis)
     {
         m_Position = glm::vec3{m_AstroPos.x * SCALE, 0.0f, m_AstroPos.y * SCALE};
         m_Scale = glm::vec3{static_cast<float>(radius) / 100'000.0f};
+        AddRotation(axis);
         CalculateModelMatrix();
     }
 
@@ -65,6 +66,8 @@ namespace SolarSim {
         
         m_Position.x = m_AstroPos.x * SCALE; 
         m_Position.z = m_AstroPos.y * SCALE;
+
+        AddRotation(m_RotationRate * ts, glm::vec3{0, 1, 0});
         CalculateModelMatrix();
     }
 }

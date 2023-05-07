@@ -7,7 +7,7 @@ namespace Pandora {
     class OpenGLTexture3D : public Texture3D
     {
     public:
-        OpenGLTexture3D(const std::array<std::string_view, 6>& files);
+        OpenGLTexture3D(const std::array<std::string, 6>& files);
         virtual ~OpenGLTexture3D();
 
         virtual uint32_t GetWidth() const override { return m_Width; }

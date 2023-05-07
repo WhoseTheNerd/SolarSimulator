@@ -8,11 +8,17 @@ yaw = -26.55
 pitch = -20.79
 position = [552.35, 37.05, 50.06]
 
+[skybox]
+# right (+X), left(-X), top(+Y), bottom(-Y), front(+Z), back(-Z)
+files = ["2/right.png", "2/left.png", "2/top.png", "2/bottom.png", "2/front.png", "2/back.png"]
+
 [Sun]
 mass = 1.989e30
 radius = 696340e3
 distance = 0
 orbit_velocity = 0.0
+rotation_rate = 0
+axis = [0, 0, 0]
 model = "sphere.obj"
 texture = "Sun.png"
 
@@ -21,6 +27,8 @@ mass = 3.285e23
 radius = 2439.7e3
 distance = 58e9
 orbit_velocity = 47.36e3
+rotation_rate = 15
+axis = [0, 0, 2]
 model = "Mercury.obj"
 texture = "Mercury.png"
 
@@ -29,6 +37,8 @@ mass = 4.867e24
 radius = 6051.8e3
 distance = 107.58e9
 orbit_velocity = 35.02e3
+rotation_rate = 15
+axis = [0, 0, 3]
 model = "Venus.obj"
 texture = "Venus.png"
 
@@ -37,6 +47,8 @@ mass = 5.972e24
 radius = 6371e3
 distance = 150.88e9
 orbit_velocity = 29.78e3
+rotation_rate = 15
+axis = [0, 0, 23.5]
 model = "earth.obj"
 texture = "earth.jpg"
 
@@ -45,6 +57,8 @@ mass = 6.39e23
 radius = 3389.5e3
 distance = 267.73e9
 orbit_velocity = 24.08e3
+rotation_rate = 15
+axis = [0, 0, 25]
 model = "Mars.obj"
 texture = "Mars.png"
 
@@ -53,6 +67,8 @@ mass = 1.898e27
 radius = 69911e3
 distance = 741.1e9
 orbit_velocity = 13.06e3
+rotation_rate = 15
+axis = [0, 0, 3]
 model = "sphere.obj"
 texture = "Jupiter.png"
 
@@ -61,6 +77,8 @@ mass = 5.683e26
 radius = 58232e3
 distance = 1.4648e12
 orbit_velocity = 9.67e3
+rotation_rate = 15
+axis = [0, 0, 26.73]
 model = "sphere.obj"
 texture = "Saturn.png"
 
@@ -69,6 +87,8 @@ mass = 8.681e25
 radius = 25362e3
 distance = 2.9387e12
 orbit_velocity = 6.79e3
+rotation_rate = 15
+axis = [0, 0, 97.77]
 model = "sphere.obj"
 texture = "Uranus.png"
 
@@ -77,6 +97,8 @@ mass = 1.024e26
 radius = 24622e3
 distance = 4.4732e12
 orbit_velocity = 5.45e3
+rotation_rate = 15
+axis = [0, 0, 28]
 model = "sphere.obj"
 texture = "Neptune.png"
 
@@ -85,5 +107,7 @@ mass = 1.30900e22
 radius = 1188.3e3
 distance = 5.9e12
 orbit_velocity = 4.64e3
+rotation_rate = 15
+axis = [0, 0, 122.5]
 model = "sphere.obj"
 texture = "Pluto.png"

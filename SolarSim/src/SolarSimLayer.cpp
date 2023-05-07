@@ -54,9 +54,11 @@ namespace SolarSim {
             double radius;
             double distance;
             double orbit_velocity;
+            double rotationRate;
+            glm::vec3 axis;
 
-            PlanetData(const std::string& name, const std::string& modelPath, const std::string& texturePath, double mass, double radius, double distance, double orbit_velocity)
-                : name(name), modelPath(modelPath), texturePath(texturePath), mass(mass), radius(radius), distance(distance), orbit_velocity(orbit_velocity)
+            PlanetData(const std::string& name, const std::string& modelPath, const std::string& texturePath, double mass, double radius, double distance, double orbit_velocity, double rotationRate, const glm::vec3& axis)
+                : name(name), modelPath(modelPath), texturePath(texturePath), mass(mass), radius(radius), distance(distance), orbit_velocity(orbit_velocity), rotationRate(rotationRate), axis(axis) 
             {}
         };
 
@@ -71,7 +73,10 @@ namespace SolarSim {
             const double radius = planets_file[name]["radius"].value_or(-1.0);
             const double distance = planets_file[name]["distance"].value_or(-1.0);
             const double orbit_velocity = planets_file[name]["orbit_velocity"].value_or(0.0);
-            planetsData.emplace_back(name, modelpath, texturepath, mass, radius, distance, orbit_velocity);
+            const double rotation_rate = planets_file[name]["rotation_rate"].value_or(0.0);
+            const auto axis_array = planets_file[name]["axis"].as_array();
+            const glm::vec3 axis = glm::vec3{axis_array->at(0).value_or(0.0f), axis_array->at(1).value_or(0.0f), axis_array->at(2).value_or(0.0f)};
+            planetsData.emplace_back(name, modelpath, texturepath, mass, radius, distance, orbit_velocity, rotation_rate, axis);
         });
 
         struct PureTexturedMesh
@@ -104,7 +109,7 @@ namespace SolarSim {
             const Pandora::Ref<Pandora::Mesh> mesh = Pandora::CreateRef<Pandora::Mesh>(pureMesh.vertices, pureMesh.indices);
             const Pandora::Ref<Pandora::Texture2D> texture = Pandora::Texture2D::Create(pureMesh.imageData);
 
-            auto planet = Pandora::CreateRef<Planet>(planetData.name, mesh, texture, planetData.mass, planetData.radius, planetData.distance, planetData.orbit_velocity);
+            auto planet = Pandora::CreateRef<Planet>(planetData.name, mesh, texture, planetData.mass, planetData.radius, planetData.distance, planetData.orbit_velocity, planetData.rotationRate, planetData.axis);
             m_Planets.push_back(planet);
         }
 
@@ -114,14 +119,16 @@ namespace SolarSim {
 
         Pandora::RenderCommand::SetClearColor({0.2f, 0.3f, 0.8f, 1.0f});
         Pandora::Renderer3D::Init("SolarSim/assets/shaders/basic.shader");
+        
+        const auto skybox_files_array = planets_file["skybox"]["files"].as_array();
 
-        const std::array<std::string_view, 6> files = {
-            "SolarSim/assets/textures/skybox/right.jpg",
-            "SolarSim/assets/textures/skybox/left.jpg",
-            "SolarSim/assets/textures/skybox/top.jpg",
-            "SolarSim/assets/textures/skybox/bottom.jpg",
-            "SolarSim/assets/textures/skybox/front.jpg",
-            "SolarSim/assets/textures/skybox/back.jpg",
+        const std::array<std::string, 6> files = {
+            std::string("SolarSim/assets/textures/skybox/") + skybox_files_array->at(0).value_or(""),
+            std::string("SolarSim/assets/textures/skybox/") + skybox_files_array->at(1).value_or(""),
+            std::string("SolarSim/assets/textures/skybox/") + skybox_files_array->at(2).value_or(""),
+            std::string("SolarSim/assets/textures/skybox/") + skybox_files_array->at(3).value_or(""),
+            std::string("SolarSim/assets/textures/skybox/") + skybox_files_array->at(4).value_or(""),
+            std::string("SolarSim/assets/textures/skybox/") + skybox_files_array->at(5).value_or(""),
         };
 
         Pandora::Scope<Pandora::Skybox> skybox = Pandora::CreateScope<Pandora::Skybox>("SolarSim/assets/shaders/skybox.shader", files);
@@ -166,10 +173,6 @@ namespace SolarSim {
         }
 
         m_CameraController.OnUpdate(ts);
-
-        for (auto planet : m_Planets) {
-            planet->AddRotation((360.0f / 24.0f * ts), glm::vec3{0, 1, 0});
-        }
     }
 
     void SolarSimLayer::OnRender()

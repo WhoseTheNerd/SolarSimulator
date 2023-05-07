@@ -39,7 +39,7 @@ namespace Pandora {
         { Pandora::ShaderDataType::Float3, "aPos" },
     };
 
-    Skybox::Skybox(const char* shaderpath, const std::array<std::string_view, 6>& files)
+    Skybox::Skybox(const char* shaderpath, const std::array<std::string, 6>& files)
         : m_Mesh(CreateRef<Mesh>(SKYBOX_VERTICES, SKYBOX_INDICES, SKYBOX_LAYOUT)), 
           m_Shader(Shader::Create(shaderpath)), 
           m_Cubemap(Texture3D::Create(files))

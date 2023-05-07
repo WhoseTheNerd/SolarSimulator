@@ -36,6 +36,6 @@ namespace Pandora {
     class Texture3D : public Texture
     {
     public:
-        static Scope<Texture3D> Create(const std::array<std::string_view, 6>& files);
+        static Scope<Texture3D> Create(const std::array<std::string, 6>& files);
     };
 }

@@ -27,7 +27,8 @@ namespace Pandora {
         void SetPosition(const glm::vec3& position) { m_Position = position; CalculateModelMatrix(); }
         const glm::vec3& GetPosition() const { return m_Position; }
 
-        void AddRotation(float angle, const glm::vec3& axis) { m_Rotation = glm::angleAxis(glm::radians(angle), axis) * m_Rotation; CalculateModelMatrix(); }
+        void AddRotation(const glm::vec3& eulerAngle);
+        void AddRotation(float angle, const glm::vec3& axis);
         const glm::quat& GetRotation() const { return m_Rotation; }
 
         const Ref<Mesh>& GetMesh() const { return m_Mesh; }

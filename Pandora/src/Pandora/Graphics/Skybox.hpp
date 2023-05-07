@@ -11,7 +11,7 @@ namespace Pandora {
     class Skybox
     {
     public:
-        Skybox(const char* shaderpath, const std::array<std::string_view, 6>& files);
+        Skybox(const char* shaderpath, const std::array<std::string, 6>& files);
 
         const Ref<Mesh>& GetMesh() const { return m_Mesh; }
         const Ref<Shader>& GetShader() const { return m_Shader; }
