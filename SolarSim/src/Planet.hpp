@@ -15,6 +15,7 @@ namespace SolarSim {
         void OnUpdate(Pandora::Timestep ts, const std::vector<Pandora::Ref<Planet>>& planets);
 
         const std::string& GetName() const { return m_Name; }
+        double GetRadius() const { return m_Radius; }
     private:
         std::string m_Name;
         double m_Mass;

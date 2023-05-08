@@ -12,7 +12,7 @@ namespace SolarSim {
     {
         m_Position = glm::vec3{m_AstroPos.x * SCALE, 0.0f, m_AstroPos.y * SCALE};
         m_Scale = glm::vec3{static_cast<float>(radius) / 100'000.0f};
-        AddRotation(axis);
+        AddRotation(m_Axis);
         CalculateModelMatrix();
     }
 

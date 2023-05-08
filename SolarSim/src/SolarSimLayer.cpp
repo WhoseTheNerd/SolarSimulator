@@ -177,8 +177,9 @@ namespace SolarSim {
         if (m_StartSimulation) {
             for (auto& planet : m_Planets) {
                 planet->OnUpdate(ts, m_Planets);
-                if (planet->GetName() == "Mercury") {
-                    m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{100.0f, 100.0f, -100.0f});
+                if (planet->GetName() == "Earth") {
+                    const double radius = planet->GetRadius() / 5'000.0;
+                    m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{radius, radius, radius});
                 }
             }
         }

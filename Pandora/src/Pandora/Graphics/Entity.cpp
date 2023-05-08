@@ -30,13 +30,13 @@ namespace Pandora {
 
     void Entity::AddRotation(const glm::vec3& eulerAngle)
     {
-        m_Rotation = glm::quat(glm::radians(eulerAngle)) * m_Rotation; 
+        m_Rotation *= glm::quat(glm::radians(eulerAngle));
         CalculateModelMatrix(); 
     }
 
     void Entity::AddRotation(float angle, const glm::vec3& axis)
     { 
-        m_Rotation = glm::angleAxis(glm::radians(angle), axis) * m_Rotation; 
+        m_Rotation *= glm::angleAxis(glm::radians(angle), axis);
         CalculateModelMatrix(); 
     }
 }
