@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <stb_image.h>
 
-#define LOAD_MT 0
+#define LOAD_MT 1
 
 namespace Pandora {
 

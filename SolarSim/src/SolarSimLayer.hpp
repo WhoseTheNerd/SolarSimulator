@@ -27,6 +27,7 @@ namespace SolarSim {
         Pandora::PerspectiveCameraController m_CameraController;
 
         bool m_MouseCaptured = true;
+        bool m_StartSimulation = false;
     };
 
 }

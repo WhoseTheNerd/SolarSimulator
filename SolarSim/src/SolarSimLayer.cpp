@@ -14,7 +14,7 @@
 
 #include <toml.hpp>
 
-#define USE_MT 0
+#define USE_MT 1
 
 namespace SolarSim {
 
@@ -174,13 +174,15 @@ namespace SolarSim {
             startTime = endTime;
         }
 
-        for (auto& planet : m_Planets) {
-            planet->OnUpdate(ts, m_Planets);
-            if (planet->GetName() == "Mercury") {
-                m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{100.0f, 100.0f, -100.0f});
+        if (m_StartSimulation) {
+            for (auto& planet : m_Planets) {
+                planet->OnUpdate(ts, m_Planets);
+                if (planet->GetName() == "Mercury") {
+                    m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{100.0f, 100.0f, -100.0f});
+                }
             }
         }
-
+        
         m_CameraController.OnUpdate(ts);
     }
 
@@ -204,6 +206,8 @@ namespace SolarSim {
         float camera_speed = m_CameraController.GetTranslationSpeed();
         ImGui::SliderFloat("Camera speed", &camera_speed, 80.0f, 500.0f);
         m_CameraController.SetTranslationSpeed(camera_speed);
+
+        ImGui::Checkbox("Start simulation", &m_StartSimulation);
 
         for (auto& planet : m_Planets) {
             ImGui::Text("%s position: {x: %.2f; y: %.2f; z: %.2f}", planet->GetName().c_str(), planet->GetPosition().x, planet->GetPosition().y, planet->GetPosition().z);
