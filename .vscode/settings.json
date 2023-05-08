@@ -97,6 +97,7 @@
         "stdfloat": "cpp",
         "*.inc": "cpp",
         "__hash_table": "cpp",
-        "__tree": "cpp"
+        "__tree": "cpp",
+        "__mutex_base": "cpp"
     }
 }

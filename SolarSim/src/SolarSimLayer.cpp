@@ -14,6 +14,8 @@
 
 #include <toml.hpp>
 
+#define USE_MT 0
+
 namespace SolarSim {
 
     SolarSimLayer::SolarSimLayer()
@@ -79,6 +81,7 @@ namespace SolarSim {
             planetsData.emplace_back(name, modelpath, texturepath, mass, radius, distance, orbit_velocity, rotation_rate, axis);
         });
 
+#if USE_MT
         struct PureTexturedMesh
         {
             std::vector<Pandora::Vertex> vertices;
@@ -101,15 +104,21 @@ namespace SolarSim {
         }
 
         PD_ASSERT(pureMeshesFuture.size() == planetsData.size(), "Something wrong going around here.");
+#endif
 
         for (size_t i = 0; i < planetsData.size(); ++i) {
             PlanetData planetData = planetsData[i];
+            #if USE_MT
             PureTexturedMesh pureMesh = pureMeshesFuture[i].get();
-
+            
             const Pandora::Ref<Pandora::Mesh> mesh = Pandora::CreateRef<Pandora::Mesh>(pureMesh.vertices, pureMesh.indices);
             const Pandora::Ref<Pandora::Texture2D> texture = Pandora::Texture2D::Create(pureMesh.imageData);
-
+#endif
+#if USE_MT
             auto planet = Pandora::CreateRef<Planet>(planetData.name, mesh, texture, planetData.mass, planetData.radius, planetData.distance, planetData.orbit_velocity, planetData.rotationRate, planetData.axis);
+#else
+            auto planet = Pandora::CreateRef<Planet>(planetData.name, Pandora::CreateRef<Pandora::Mesh>(planetData.modelPath.c_str()), Pandora::Texture2D::Create(planetData.texturePath.c_str()), planetData.mass, planetData.radius, planetData.distance, planetData.orbit_velocity, planetData.rotationRate, planetData.axis);
+#endif
             m_Planets.push_back(planet);
         }
 
