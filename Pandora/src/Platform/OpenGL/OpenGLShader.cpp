@@ -40,6 +40,8 @@ namespace Pandora {
                 int location = glGetUniformLocation(m_ProgramHandle, uniform_name);
                 m_UniformLocations[uniform_name] = location;
             }
+
+            delete[] uniform_name;
         }
 
         #endif
