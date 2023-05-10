@@ -19,6 +19,30 @@ namespace Pandora {
     {
         auto[vertexSource, fragmentSource] = ParseShaderFile(shaderSource);
         m_ProgramHandle = CreateShader(vertexSource.c_str(), fragmentSource.c_str());
+
+        #if USE_CACHING
+
+        int uniform_count;
+        glGetProgramiv(m_ProgramHandle, GL_ACTIVE_UNIFORMS, &uniform_count);
+        if (uniform_count > 0)
+        {
+            int max_name_len;
+            glGetProgramiv(m_ProgramHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_name_len);
+
+            char* uniform_name = new char[max_name_len];
+
+            for (int i = 0; i < uniform_count; i++) {
+                int length;
+                int count;
+                GLenum type;
+                glGetActiveUniform(m_ProgramHandle, i, max_name_len, &length, &count, &type, uniform_name);
+
+                int location = glGetUniformLocation(m_ProgramHandle, uniform_name);
+                m_UniformLocations[uniform_name] = location;
+            }
+        }
+
+        #endif
     }
 
     OpenGLShader::~OpenGLShader()
