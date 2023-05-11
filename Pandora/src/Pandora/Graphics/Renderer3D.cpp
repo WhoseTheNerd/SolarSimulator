@@ -19,9 +19,6 @@ namespace Pandora {
     {
         s_Data = CreateScope<Renderer3DStorage>();
         s_Data->ShaderProgram = Shader::Create(shaderpath);
-        s_Data->ShaderProgram->SetUniform("u_UseTextures", 0);
-        s_Data->ShaderProgram->SetUniform("u_LightPos", glm::vec3{-2.0f, 12.0f, 12.0f});
-        s_Data->ShaderProgram->SetUniform("u_LightColor", Pandora::FromHex("#D3D3D3"));
     }
 
     void Renderer3D::Shutdown()
@@ -54,8 +51,6 @@ namespace Pandora {
     void Renderer3D::DrawEntity(const Ref<Entity>& entity)
     {
         entity->GetTexture()->Bind();
-        s_Data->ShaderProgram->SetUniform("u_UseTextures", 1);
-        s_Data->ShaderProgram->SetUniform("u_Texture", 0);
         s_Data->ShaderProgram->SetUniform("u_Model", entity->GetModelMatrix());
 
         RenderCommand::DrawIndexed(entity->GetMesh());
