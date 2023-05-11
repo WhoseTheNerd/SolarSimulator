@@ -29,19 +29,17 @@ namespace Pandora {
             int max_name_len;
             glGetProgramiv(m_ProgramHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH, &max_name_len);
 
-            char* uniform_name = new char[max_name_len];
+            std::vector<char> uniform_name(max_name_len);
 
             for (int i = 0; i < uniform_count; i++) {
                 int length;
                 int count;
                 GLenum type;
-                glGetActiveUniform(m_ProgramHandle, i, max_name_len, &length, &count, &type, uniform_name);
+                glGetActiveUniform(m_ProgramHandle, i, max_name_len, &length, &count, &type, uniform_name.data());
 
-                int location = glGetUniformLocation(m_ProgramHandle, uniform_name);
-                m_UniformLocations[uniform_name] = location;
+                int location = glGetUniformLocation(m_ProgramHandle, uniform_name.data());
+                m_UniformLocations[uniform_name.data()] = location;
             }
-
-            delete[] uniform_name;
         }
 
         #endif

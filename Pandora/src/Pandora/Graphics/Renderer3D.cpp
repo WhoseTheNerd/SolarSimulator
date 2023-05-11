@@ -15,11 +15,11 @@ namespace Pandora {
         const glm::mat4* ViewMatrix;
     };
 
-    static Renderer3DStorage* s_Data;
+    static Scope<Renderer3DStorage> s_Data;
 
     void Renderer3D::Init(const char* shaderpath)
     {
-        s_Data = new Renderer3DStorage();
+        s_Data = CreateScope<Renderer3DStorage>();
         s_Data->ShaderProgram = Shader::Create(shaderpath);
         s_Data->ShaderProgram->SetUniform("u_UseTextures", 0);
         s_Data->ShaderProgram->SetUniform("u_LightPos", glm::vec3{-2.0f, 12.0f, 12.0f});
@@ -28,7 +28,6 @@ namespace Pandora {
 
     void Renderer3D::Shutdown()
     {
-        delete s_Data;
     }
 
     void Renderer3D::BeginScene(const PerspectiveCamera& camera)
