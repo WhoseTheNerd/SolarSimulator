@@ -11,8 +11,6 @@ namespace Pandora {
     {
         Ref<Shader> ShaderProgram;
         Scope<Skybox> SkyboxObj;
-        const glm::mat4* ProjectionMatrix;
-        const glm::mat4* ViewMatrix;
     };
 
     static Scope<Renderer3DStorage> s_Data;
@@ -35,22 +33,19 @@ namespace Pandora {
         s_Data->ShaderProgram->Bind();
         s_Data->ShaderProgram->SetUniform("u_ViewProjection", camera.GetViewProjectionMatrix());
 
-        RenderCommand::Clear();
+        glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+        s_Data->SkyboxObj->GetShader()->SetUniform("view", view);
+        s_Data->SkyboxObj->GetShader()->SetUniform("projection", camera.GetProjectionMatrix());
 
-        s_Data->ProjectionMatrix = &camera.GetProjectionMatrix();
-        s_Data->ViewMatrix = &camera.GetViewMatrix();
+        RenderCommand::Clear();
     }
 
     void Renderer3D::EndScene()
     {
         RenderCommand::SetDepthFunction(DepthFunctionMode::LessEqual);
 
-        s_Data->SkyboxObj->GetShader()->Bind();
-        glm::mat4 view = glm::mat4(glm::mat3(*s_Data->ViewMatrix));
-        s_Data->SkyboxObj->GetShader()->SetUniform("view", view);
-        s_Data->SkyboxObj->GetShader()->SetUniform("projection", *s_Data->ProjectionMatrix);
-
         s_Data->SkyboxObj->GetCubeMap()->Bind();
+        s_Data->SkyboxObj->GetShader()->Bind();
         RenderCommand::DrawIndexed(s_Data->SkyboxObj->GetMesh());
 
         RenderCommand::SetDepthFunction(DepthFunctionMode::Less);
