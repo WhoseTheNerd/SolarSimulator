@@ -142,6 +142,11 @@ namespace SolarSim {
 
         Pandora::Scope<Pandora::Skybox> skybox = Pandora::CreateScope<Pandora::Skybox>("SolarSim/assets/shaders/skybox.shader", files);
         Pandora::Renderer3D::SetSkybox(std::move(skybox));
+
+        followPlanetItems = (const char**)new char*[m_Planets.size()-1];
+        for (int i = 1; i < m_Planets.size(); ++i) {
+            followPlanetItems[i-1] = m_Planets[i]->GetName().c_str();
+        }
     }
 
     void SolarSimLayer::OnDetach()
@@ -177,7 +182,7 @@ namespace SolarSim {
         if (m_StartSimulation) {
             for (auto& planet : m_Planets) {
                 planet->OnUpdate(ts, m_Planets);
-                if (planet->GetName() == "Earth") {
+                if (planet->GetName() == followPlanetName) {
                     const double radius = planet->GetRadius() / 5'000.0;
                     m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{radius, radius, radius});
                 }
@@ -210,9 +215,10 @@ namespace SolarSim {
 
         ImGui::Checkbox("Start simulation", &m_StartSimulation);
 
-        for (auto& planet : m_Planets) {
-            ImGui::Text("%s position: {x: %.2f; y: %.2f; z: %.2f}", planet->GetName().c_str(), planet->GetPosition().x, planet->GetPosition().y, planet->GetPosition().z);
-        }
+        static int current_planet_idx = 0;
+        ImGui::Text("Follow planet: ");
+        ImGui::ListBox("", &current_planet_idx, followPlanetItems, m_Planets.size()-1);
+        followPlanetName = followPlanetItems[current_planet_idx];
 
         ImGui::End();
     }

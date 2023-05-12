@@ -28,6 +28,8 @@ namespace SolarSim {
 
         bool m_MouseCaptured = true;
         bool m_StartSimulation = false;
+        const char** followPlanetItems;
+        const char* followPlanetName;
     };
 
 }
