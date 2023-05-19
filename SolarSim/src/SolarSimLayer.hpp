@@ -3,6 +3,7 @@
 #include <Pandora.hpp>
 
 #include "Planet.hpp"
+#include "OrbitingCamera.hpp"
 
 namespace SolarSim {
 
@@ -24,7 +25,8 @@ namespace SolarSim {
     private:
         std::vector<Pandora::Ref<Planet>> m_Planets;
 
-        Pandora::PerspectiveCameraController m_CameraController;
+        //Pandora::PerspectiveCameraController m_CameraController;
+        OrbitingCamera m_OrbitingCamera;
 
         bool m_MouseCaptured = true;
         bool m_StartSimulation = false;

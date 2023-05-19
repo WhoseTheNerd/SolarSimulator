@@ -37,6 +37,19 @@ namespace Pandora {
         RenderCommand::Clear();
     }
 
+
+    void Renderer3D::BeginScene(const glm::mat4& perspectiveMat, const glm::mat4& viewMat, const glm::mat4 viewProjectionMat)
+    {
+        s_Data->ShaderProgram->Bind();
+        s_Data->ShaderProgram->SetUniform("u_ViewProjection", viewProjectionMat);
+
+        glm::mat4 view = glm::mat4(glm::mat3(viewMat));
+        s_Data->SkyboxObj->GetShader()->SetUniform("view", view);
+        s_Data->SkyboxObj->GetShader()->SetUniform("projection", perspectiveMat);
+
+        RenderCommand::Clear();
+    }
+
     void Renderer3D::EndScene()
     {
         RenderCommand::SetDepthFunction(DepthFunctionMode::LessEqual);

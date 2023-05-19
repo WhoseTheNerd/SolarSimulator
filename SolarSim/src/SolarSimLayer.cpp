@@ -19,7 +19,7 @@
 namespace SolarSim {
 
     SolarSimLayer::SolarSimLayer()
-        : m_CameraController(1280.0f / 720.0f)
+        : m_OrbitingCamera({0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f})  /*m_CameraController(1280.0f / 720.0f)*/
     {
     }
 
@@ -42,10 +42,12 @@ namespace SolarSim {
         const float camera_pos_y = planets_file["camera"]["position"].as_array()->at(1).value_or(0.0f);
         const float camera_pos_z = planets_file["camera"]["position"].as_array()->at(2).value_or(0.0f);
 
-        m_CameraController.SetTranslationSpeed(camera_speed);
+        /*m_CameraController.SetTranslationSpeed(camera_speed);
         m_CameraController.SetCameraPitch(camera_pitch);
         m_CameraController.SetCameraYaw(camera_yaw);
-        m_CameraController.SetCameraPosition(glm::vec3{camera_pos_x, camera_pos_y, camera_pos_z});
+        m_CameraController.SetCameraPosition(glm::vec3{camera_pos_x, camera_pos_y, camera_pos_z});*/
+
+        m_OrbitingCamera.SetPosition(glm::vec3{camera_pos_x, camera_pos_y, camera_pos_z});
 
         struct PlanetData
         {
@@ -184,35 +186,44 @@ namespace SolarSim {
             for (auto& planet : m_Planets) {
                 planet->OnUpdate(ts, m_Planets);
                 if (planet->GetName() == followPlanetName) {
-                    const double radius = planet->GetRadius() / 5'000.0;
-                    m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{radius, radius, radius});
+                    // const double radius = planet->GetRadius() / 5'000.0;
+                    // m_CameraController.SetCameraPosition(planet->GetPosition() + glm::vec3{radius, radius, radius});
+                    m_OrbitingCamera.SetTarget(planet->GetPosition());
+                    //m_OrbitingCamera.SetPosition(planet->GetPosition() + glm::vec3{radius});
                 }
             }
         }
         
-        m_CameraController.OnUpdate(ts);
+        // m_CameraController.OnUpdate(ts);
     }
 
     void SolarSimLayer::OnRender()
     {
-        Pandora::Renderer3D::BeginScene(m_CameraController.GetCamera());
+        //Pandora::Renderer3D::BeginScene(m_CameraController.GetCamera());
+        Pandora::Renderer3D::BeginScene(
+            m_OrbitingCamera.GetProjectionMatrix(), 
+            m_OrbitingCamera.GetViewMatrix(), 
+            m_OrbitingCamera.GetViewProjectionMatrix()
+        );
+
         for (auto planet : m_Planets) {
             Pandora::Renderer3D::DrawEntity(planet);
         }
+
         Pandora::Renderer3D::EndScene();
     }
 
     void SolarSimLayer::OnImGuiRender()
     {
         ImGui::Begin("Properties");
-        ImGui::Text("Selected entity: %s", "Earth");
+        ImGui::Text("Selected entity: %s", followPlanetName);
 
-        ImGui::Text("Camera Position: %.2f %.2f %.2f", m_CameraController.GetCamera().GetPosition().x, m_CameraController.GetCamera().GetPosition().y, m_CameraController.GetCamera().GetPosition().z);
-        ImGui::Text("Camera Yaw & Pitch: %.2f & %.2f", m_CameraController.GetCamera().GetYaw(), m_CameraController.GetCamera().GetPitch());
+        ImGui::Text("Camera Position: %.2f %.2f %.2f", m_OrbitingCamera.GetPosition()->x, m_OrbitingCamera.GetPosition()->y, m_OrbitingCamera.GetPosition()->z);
+        // ImGui::Text("Camera Yaw & Pitch: %.2f & %.2f", m_CameraController.GetCamera().GetYaw(), m_CameraController.GetCamera().GetPitch());
 
-        float camera_speed = m_CameraController.GetTranslationSpeed();
+        /*float camera_speed = m_CameraController.GetTranslationSpeed();
         ImGui::SliderFloat("Camera speed", &camera_speed, 80.0f, 500.0f);
-        m_CameraController.SetTranslationSpeed(camera_speed);
+        m_CameraController.SetTranslationSpeed(camera_speed);*/
 
         ImGui::Checkbox("Start simulation", &m_StartSimulation);
 
@@ -227,7 +238,8 @@ namespace SolarSim {
     void SolarSimLayer::OnEvent(Pandora::Event& event) 
     {
         if (m_MouseCaptured) {
-            m_CameraController.OnEvent(event);
+            // m_CameraController.OnEvent(event);
+            m_OrbitingCamera.OnEvent(event);
         }
 
         Pandora::EventDispatcher dispatcher(event);
@@ -244,7 +256,8 @@ namespace SolarSim {
         case Pandora::Key::Escape:
             m_MouseCaptured ^= true;
             if (m_MouseCaptured) {
-                m_CameraController.SetFirstMouseEvent(true);
+                // m_CameraController.SetFirstMouseEvent(true);
+                m_OrbitingCamera.SetFirstMouseEvent(true);
                 Pandora::Input::SetInputMode(Pandora::InputMode::Capture);
             } else {
                 Pandora::Input::SetInputMode(Pandora::InputMode::Normal);

@@ -16,6 +16,7 @@ namespace Pandora {
 		static void Shutdown();
 
         static void BeginScene(const PerspectiveCamera& camera);
+        static void BeginScene(const glm::mat4& perspectiveMat, const glm::mat4& viewMat, const glm::mat4 viewProjectionMat);
         static void EndScene();
 
         static void DrawEntity(const Ref<Entity>& entity);
