@@ -15,16 +15,16 @@ namespace SolarSim {
 
     void OrbitingCamera::OnUpdate(Pandora::Timestep ts)
     {
-
+        
     }
 
     void OrbitingCamera::OnEvent(Pandora::Event& e)
     {
         Pandora::EventDispatcher dispatcher(e);
         dispatcher.Dispatch<Pandora::MouseMovedEvent>(PD_BIND_EVENT_FN(SolarSim::OrbitingCamera::OnMouseMoved));
+        dispatcher.Dispatch<Pandora::MouseScrolledEvent>(PD_BIND_EVENT_FN(SolarSim::OrbitingCamera::OnMouseScrolled));
         dispatcher.Dispatch<Pandora::WindowResizeEvent>(PD_BIND_EVENT_FN(SolarSim::OrbitingCamera::OnWindowResized));
     }
-
 
     void OrbitingCamera::SetCameraView(const glm::vec3& eye, const glm::vec3& lookAt, const glm::vec3& up)
     {
@@ -81,6 +81,21 @@ namespace SolarSim {
         lastMouseY = e.GetY();
 
         return false;
+    }
+
+    bool OrbitingCamera::OnMouseScrolled(Pandora::MouseScrolledEvent& e)
+    {
+        m_ZoomLevel += -e.GetYOffset() * 0.1f;
+        PD_INFO("{}", m_ZoomLevel);
+
+        const glm::vec3 v1 = m_Eye - m_LookAt;
+        const glm::vec3 v2 = m_ZoomLevel * v1;
+
+        m_Eye = m_LookAt + v2;
+
+        UpdateViewMatrix();
+
+        return false;   
     }
 
     bool OrbitingCamera::OnWindowResized(Pandora::WindowResizeEvent& e)

@@ -31,6 +31,7 @@ namespace SolarSim {
         void UpdateViewMatrix();
 
 		bool OnMouseMoved(Pandora::MouseMovedEvent& e);
+        bool OnMouseScrolled(Pandora::MouseScrolledEvent& e);
 		bool OnWindowResized(Pandora::WindowResizeEvent& e);
     private:
         glm::mat4 m_ViewMatrix;
@@ -46,5 +47,7 @@ namespace SolarSim {
         float m_AspectRatio;
 
         bool m_FirstMouseEvent = true;
+
+        float m_ZoomLevel = 1.0f;
     };
 }
