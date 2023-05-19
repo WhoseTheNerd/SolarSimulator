@@ -152,6 +152,7 @@ namespace SolarSim {
     void SolarSimLayer::OnDetach()
     { 
         Pandora::Renderer3D::Shutdown();
+        delete[] followPlanetItems;
     }
 
     void SolarSimLayer::OnUpdate(Pandora::Timestep ts)
