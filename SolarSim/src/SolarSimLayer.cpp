@@ -149,6 +149,8 @@ namespace SolarSim {
         for (int i = 1; i < m_Planets.size(); ++i) {
             followPlanetItems[i-1] = m_Planets[i]->GetName().c_str();
         }
+
+        followPlanetName = followPlanetItems[0];
     }
 
     void SolarSimLayer::OnDetach()
